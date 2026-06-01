@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <title>No Payne No Gain 🇳🇿</title>
+  <meta name="description" content="The world's first fan app for Tim Payne — the least-known player at the 2026 FIFA World Cup who became the most followed overnight." />
+  <meta property="og:title" content="No Payne No Gain 🇳🇿" />
+  <meta property="og:description" content="From 4,715 followers to 2.5 million. Tap for Tim. Join the army." />
+  <meta property="og:type" content="website" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #070A0D;
+      --bg-card: rgba(255,255,255,0.04);
+      --bg-elevated: #0D1117;
+      --border: rgba(255,255,255,0.08);
+      --border-active: rgba(0,208,132,0.3);
+      --text: #FFFFFF;
+      --text-secondary: rgba(255,255,255,0.55);
+      --text-muted: rgba(255,255,255,0.3);
+      --accent: #00D084;
+      --accent-dim: rgba(0,208,132,0.12);
+      --gold: #FFD700;
+      --gold-dim: rgba(255,215,0,0.15);
+      --white-08: rgba(255,255,255,0.08);
+      --white-12: rgba(255,255,255,0.12);
+      --white-20: rgba(255,255,255,0.2);
+    }
+    html, body { height: 100%; background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; }
+    body { display: flex; justify-content: center; }
+    #root { width: 100%; max-width: 430px; min-height: 100vh; position: relative; }
+
+    @keyframes floatUp {
+      0% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+      100% { opacity: 0; transform: translate(-50%, -160px) scale(1.5); }
+    }
+    @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.5; } }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes slideUp { from { opacity: 0; transform: translateY(100px); } to { opacity: 1; transform: translateY(0); } }
+
+    .app { padding: 52px 20px 100px; display: flex; flex-direction: column; gap: 14px; animation: fadeIn 0.4s ease; }
+
+    /* Nav */
+    .nav { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 430px; background: var(--bg-elevated); border-top: 1px solid var(--border); display: flex; height: 82px; padding-bottom: 20px; z-index: 100; }
+    .nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; cursor: pointer; border: none; background: none; color: var(--text-muted); font-family: 'DM Sans', sans-serif; font-size: 10px; font-weight: 500; letter-spacing: 0.5px; opacity: 0.45; transition: opacity 0.2s; padding-top: 8px; }
+    .nav-item.active { opacity: 1; color: var(--accent); }
+    .nav-emoji { font-size: 22px; }
+
+    /* Screen */
+    .screen { display: none; }
+    .screen.active { display: flex; flex-direction: column; gap: 14px; }
+
+    /* Header */
+    .pill { display: inline-flex; align-self: flex-start; background: var(--white-08); border: 1px solid var(--white-12); border-radius: 100px; padding: 4px 12px; font-size: 10px; font-weight: 600; color: var(--text-muted); letter-spacing: 1.5px; }
+    .title { font-family: 'Playfair Display', serif; font-style: italic; font-size: clamp(52px, 16vw, 72px); line-height: 0.9; color: var(--text); letter-spacing: -2px; }
+    .subtitle { font-size: 13px; color: var(--text-muted); }
+    .accent { color: var(--accent); }
+
+    /* Cards */
+    .card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 20px; padding: 16px; display: flex; flex-direction: column; gap: 8px; }
+    .card.accent-border { border-color: var(--border-active); background: var(--accent-dim); }
+    .card-label { font-size: 10px; font-weight: 600; color: var(--text-muted); letter-spacing: 2px; text-transform: uppercase; }
+
+    /* Counter */
+    .counter-row { display: flex; align-items: center; gap: 12px; }
+    .counter-old { font-family: 'Playfair Display', serif; font-style: italic; font-size: 20px; color: var(--white-20); text-decoration: line-through; }
+    .counter-arrow { color: var(--white-20); font-size: 16px; }
+    .counter-big { font-family: 'Playfair Display', serif; font-style: italic; font-size: clamp(36px, 10vw, 48px); color: var(--accent); letter-spacing: -1px; transition: color 0.3s; }
+    .progress-track { height: 3px; background: var(--white-08); border-radius: 99px; overflow: hidden; }
+    .progress-fill { height: 100%; background: var(--accent); border-radius: 99px; transition: width 0.1s linear; }
+    .counter-hint { font-size: 11px; color: var(--text-muted); }
+
+    /* Tap button */
+    .tap-btn { background: #004d30; border: 1px solid var(--border-active); border-radius: 28px; padding: 24px; display: flex; flex-direction: column; align-items: center; gap: 6px; cursor: pointer; transition: transform 0.1s, box-shadow 0.3s; box-shadow: 0 0 40px 8px rgba(0,208,132,0.25); user-select: none; -webkit-tap-highlight-color: transparent; }
+    .tap-btn:active { transform: scale(0.95); box-shadow: none; }
+    .tap-emoji { font-size: 44px; pointer-events: none; }
+    .tap-label { font-size: 15px; font-weight: 700; color: var(--accent); letter-spacing: 2px; text-transform: uppercase; pointer-events: none; }
+    .tap-sub { font-size: 12px; color: var(--text-muted); pointer-events: none; }
+
+    /* Stats row */
+    .stats-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+    .stat-cell { background: var(--bg-card); border: 1px solid var(--border); border-radius: 14px; padding: 12px; display: flex; flex-direction: column; align-items: center; gap: 2px; }
+    .stat-val { font-size: 18px; font-weight: 700; }
+    .stat-lbl { font-size: 10px; color: var(--text-muted); letter-spacing: 0.5px; text-transform: uppercase; }
+
+    /* Chant */
+    .chant-quote { font-family: 'Playfair Display', serif; font-style: italic; font-size: 36px; color: var(--accent-dim); line-height: 1; position: absolute; top: 8px; left: 14px; }
+    .chant-card { position: relative; }
+    .chant-text { font-family: 'Playfair Display', serif; font-style: italic; font-size: 15px; color: var(--text-secondary); line-height: 1.5; padding-top: 10px; padding-left: 4px; }
+    .chant-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 10px; }
+    .chant-src { font-size: 11px; color: var(--text-muted); }
+
+    /* Section title */
+    .section-title { font-family: 'Playfair Display', serif; font-size: 20px; color: var(--text); margin-top: 8px; }
+
+    /* Facts grid */
+    .facts-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+    .fact-cell { background: var(--bg-card); border: 1px solid var(--border); border-radius: 14px; padding: 12px; display: flex; flex-direction: column; align-items: center; gap: 4px; text-align: center; }
+    .fact-emoji { font-size: 20px; }
+    .fact-val { font-size: 11px; font-weight: 700; }
+    .fact-lbl { font-size: 9px; color: var(--text-muted); letter-spacing: 0.8px; text-transform: uppercase; }
+
+    /* Missions */
+    .mission-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 20px; padding: 16px; display: flex; flex-direction: column; gap: 10px; }
+    .mission-card.done { border-color: var(--border-active); background: rgba(0,208,132,0.05); }
+    .mission-row { display: flex; align-items: center; gap: 12px; }
+    .mission-emoji { font-size: 28px; }
+    .mission-info { flex: 1; }
+    .mission-title { font-size: 15px; font-weight: 700; }
+    .mission-title.done { color: var(--accent); }
+    .mission-desc { font-size: 12px; color: var(--text-muted); }
+    .pts-badge { background: var(--gold-dim); border-radius: 100px; padding: 4px 10px; font-size: 12px; font-weight: 700; color: var(--gold); white-space: nowrap; }
+    .mission-track { height: 3px; background: var(--white-08); border-radius: 99px; overflow: hidden; }
+    .mission-fill { height: 100%; border-radius: 99px; background: var(--text-muted); }
+    .mission-fill.done { background: var(--accent); }
+    .completed-tag { font-size: 11px; font-weight: 600; color: var(--accent); letter-spacing: 0.5px; }
+
+    /* Chants screen */
+    .input { background: var(--white-08); border: none; border-radius: 14px; padding: 14px; font-family: 'DM Sans', sans-serif; font-size: 15px; color: var(--text); width: 100%; outline: none; }
+    .input::placeholder { color: var(--text-muted); }
+    .btn-primary { background: var(--accent); border: none; border-radius: 100px; padding: 14px; font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 700; color: #070A0D; cursor: pointer; width: 100%; transition: opacity 0.2s; }
+    .btn-primary:hover { opacity: 0.9; }
+    .btn-outline { background: var(--white-08); border: none; border-radius: 100px; padding: 12px; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 600; color: var(--text-secondary); cursor: pointer; width: 100%; transition: opacity 0.2s; }
+    .share-inline { background: var(--accent-dim); border: none; border-radius: 100px; padding: 6px 14px; font-family: 'DM Sans', sans-serif; font-size: 12px; font-weight: 600; color: var(--accent); cursor: pointer; }
+    .generated-text { font-family: 'Playfair Display', serif; font-style: italic; font-size: 16px; line-height: 1.5; white-space: pre-line; }
+
+    /* Profile / Badges */
+    .badge-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+    .badge-cell { background: var(--bg-card); border: 1px solid var(--border); border-radius: 14px; padding: 10px; display: flex; flex-direction: column; align-items: center; gap: 3px; }
+    .badge-cell.unlocked { border-color: var(--border-active); }
+    .badge-emoji { font-size: 26px; }
+    .badge-name { font-size: 8px; font-weight: 600; text-align: center; color: var(--text-muted); }
+    .badge-rarity { font-size: 7px; font-weight: 700; letter-spacing: 1px; }
+    .legend { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+    .legend-item { display: flex; align-items: center; gap: 4px; font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; }
+    .legend-dot { width: 6px; height: 6px; border-radius: 50%; }
+    .link-btn { background: none; border: none; font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500; color: var(--accent); cursor: pointer; text-align: left; padding: 2px 0; }
+
+    /* Badge modal */
+    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.85); display: flex; align-items: center; justify-content: center; padding: 32px; z-index: 200; animation: fadeIn 0.2s ease; }
+    .modal-card { background: var(--bg-elevated); border-radius: 28px; border-width: 2px; border-style: solid; padding: 32px; display: flex; flex-direction: column; align-items: center; gap: 8px; width: 100%; max-width: 300px; animation: slideUp 0.3s ease; }
+    .modal-label { font-size: 11px; font-weight: 600; color: var(--text-muted); letter-spacing: 2px; }
+    .modal-emoji { font-size: 64px; margin: 8px 0; }
+    .modal-name { font-family: 'Playfair Display', serif; font-size: 24px; text-align: center; }
+    .modal-desc { font-size: 14px; color: var(--text-secondary); text-align: center; }
+    .modal-rarity { font-size: 11px; font-weight: 700; letter-spacing: 2px; margin-bottom: 8px; }
+
+    /* Particle */
+    .particle { position: fixed; font-size: 28px; pointer-events: none; animation: floatUp 0.9s ease-out forwards; z-index: 150; }
+
+    /* Streak card */
+    .streak-card { background: var(--accent-dim); border: 1px solid var(--border-active); border-radius: 20px; padding: 16px; display: flex; flex-direction: column; gap: 10px; }
+    .streak-row { display: flex; align-items: center; gap: 12px; }
+    .streak-val { font-size: 16px; font-weight: 700; }
+    .streak-hint { font-size: 12px; color: var(--text-secondary); }
+
+    /* Story */
+    .story-text { font-size: 13px; color: var(--text-secondary); line-height: 1.6; }
+    .story-tag { font-family: 'Playfair Display', serif; font-style: italic; font-size: 14px; color: var(--accent); }
+
+    /* About */
+    .about-text { font-size: 13px; color: var(--text-secondary); line-height: 1.5; }
+    .version-text { font-size: 11px; color: var(--text-muted); }
+  </style>
+</head>
+<body>
+<div id="root">
+  <div class="app" id="app-content"></div>
+  <nav class="nav" id="nav"></nav>
+</div>
+
+<script>
+const CHANTS = [
+  "Been loving you since the day I saw you (today) 🔥",
+  "My mother gave me life, and Tim gave me the will to live it.",
+  "No Payne, No Gain. This is law.",
+  "I don't know what a Wellington Phoenix is but I'd die for it.",
+  "Tim Payne is the People's World Cup.",
+  "He had 4,700 followers. Now he has an army.",
+  "El Scarso found him. The world kept him.",
+  "Group G is Tim's group now. Everyone else is visiting.",
+  "This man trained his whole life for this moment. We're the moment.",
+  "I searched every squad. Tim was waiting for me.",
+  "He's not just a defender. He defends our hearts.",
+  "4,700 to 2.5 million. That's not followers, that's a movement.",
+  "He is already the player of the tournament.",
+  "One influencer. One defender. Seven billion potential fans.",
+];
+
+const CHANT_TEMPLATES = [
+  "No Payne, no gain!\n{name} believes in Tim!\nFrom {country} to Wellington,\nTim Payne is our champion! 🇳🇿⚽",
+  "Ohhh Tim Payne!\n{name} is with you!\nFrom 4,700 to millions,\nThe people's player! 🔥",
+  "Dale Tim! Dale Tim!\n{name} supports you!\nWellington to the world,\n{country} loves you! 🌍⚽",
+  "🎵 He came from New Zealand,\nWith just 4,700 fans,\nNow {name} from {country}\nIs part of Tim's clan! 🇳🇿",
+];
+
+const BADGES = [
+  { id: 'first_tap', name: 'First Touch', desc: 'First tap for Tim', emoji: '👆', rarity: 'common', color: '#A0AEC0', cond: s => s.totalTaps >= 1 },
+  { id: 'century', name: 'Century', desc: '100 taps today', emoji: '💯', rarity: 'common', color: '#A0AEC0', cond: s => s.sessionTaps >= 100 },
+  { id: 'thousand', name: 'Ultra', desc: '1,000 total taps', emoji: '⚡', rarity: 'rare', color: '#00D084', cond: s => s.totalTaps >= 1000 },
+  { id: 'ten_k', name: "Tim's Army", desc: '10,000 total taps', emoji: '🪖', rarity: 'epic', color: '#9F7AEA', cond: s => s.totalTaps >= 10000 },
+  { id: 'sharer', name: 'El Scarso Jr', desc: 'Shared 5 chants', emoji: '📢', rarity: 'rare', color: '#00D084', cond: s => s.sharesCount >= 5 },
+  { id: 'streak3', name: 'On Fire', desc: '3-day streak', emoji: '🔥', rarity: 'common', color: '#A0AEC0', cond: s => s.streak >= 3 },
+  { id: 'streak7', name: 'No Days Off', desc: '7-day streak', emoji: '💎', rarity: 'rare', color: '#00D084', cond: s => s.streak >= 7 },
+  { id: 'polyglot', name: 'Polyglot', desc: 'Generated a chant', emoji: '🇦🇷', rarity: 'common', color: '#A0AEC0', cond: s => s.chantGenerated },
+  { id: 'day1', name: 'Day 1 Fan', desc: 'Here from the start', emoji: '🏟️', rarity: 'rare', color: '#00D084', cond: () => true },
+  { id: 'legendary', name: 'Legendary Fan', desc: '30-day streak', emoji: '👑', rarity: 'legendary', color: '#FFD700', cond: s => s.streak >= 30 },
+  { id: 'epic_fan', name: 'True Believer', desc: '14-day streak', emoji: '🏆', rarity: 'epic', color: '#9F7AEA', cond: s => s.streak >= 14 },
+  { id: 'completionist', name: 'Completionist', desc: 'All missions done', emoji: '✅', rarity: 'epic', color: '#9F7AEA', cond: s => s.completedMissions.length >= 5 },
+];
+
+const MISSIONS = [
+  { id: 'tap50', title: 'Warm Up', desc: 'Tap 50 times for Tim', emoji: '👆', pts: 10, check: s => Math.min(s.sessionTaps / 50, 1) },
+  { id: 'tap200', title: 'Full 90 Minutes', desc: 'Tap 200 times today', emoji: '⚽', pts: 30, check: s => Math.min(s.sessionTaps / 200, 1) },
+  { id: 'share1', title: 'Spread the Word', desc: 'Share a chant card', emoji: '📤', pts: 25, check: s => Math.min(s.sharesCount / 1, 1) },
+  { id: 'chant3', title: 'Choir Practice', desc: 'Browse 3 fan chants', emoji: '🎵', pts: 15, check: s => Math.min(s.chantsViewed / 3, 1) },
+  { id: 'streak3', title: 'Consistent Fan', desc: '3-day streak', emoji: '🔥', pts: 50, check: s => Math.min(s.streak / 3, 1) },
+];
+
+const TIM_FACTS = [
+  { e: '🏆', l: 'Tournament', v: 'World Cup 2026' },
+  { e: '🏟️', l: 'Club', v: 'Wellington Phoenix' },
+  { e: '🌏', l: 'Group', v: 'G' },
+  { e: '⚡', l: 'Position', v: 'Right Back' },
+  { e: '🇳🇿', l: 'Nation', v: 'New Zealand' },
+  { e: '🚀', l: 'Peak', v: '2.5M+ fans' },
+];
+
+// State
+let state = {
+  tab: 'hype',
+  totalTaps: 0,
+  sessionTaps: 0,
+  points: 0,
+  streak: 1,
+  sharesCount: 0,
+  chantsViewed: 0,
+  chantGenerated: false,
+  completedMissions: [],
+  unlockedBadges: ['day1'],
+  chantIdx: 0,
+  fanChantIdx: 0,
+  pendingBadge: null,
+  generatedChant: '',
+};
+
+function fmt(n) {
+  if (n >= 1000000) return (n / 1000000).toFixed(1) + 'M';
+  if (n >= 1000) return (n / 1000).toFixed(1) + 'K';
+  return n.toString();
+}
+
+function checkBadges() {
+  for (const badge of BADGES) {
+    if (!state.unlockedBadges.includes(badge.id) && badge.cond(state)) {
+      state.unlockedBadges.push(badge.id);
+      state.pendingBadge = badge;
+      render();
+      return;
+    }
+  }
+}
+
+function checkMissions() {
+  for (const m of MISSIONS) {
+    if (!state.completedMissions.includes(m.id) && m.check(state) >= 1) {
+      state.completedMissions.push(m.id);
+      state.points += m.pts;
+    }
+  }
+}
+
+function spawnParticle(e) {
+  const emojis = ['🔥','⚽','🇳🇿','💥','⭐','🏆'];
+  const p = document.createElement('div');
+  p.className = 'particle';
+  p.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+  p.style.left = (e.clientX || window.innerWidth / 2) + 'px';
+  p.style.top = (e.clientY || window.innerHeight / 2) + 'px';
+  document.body.appendChild(p);
+  setTimeout(() => p.remove(), 900);
+}
+
+function shareText(text) {
+  const full = text + '\n\n🇳🇿 No Payne, No Gain\nnopaynegain.vercel.app';
+  if (navigator.share) {
+    navigator.share({ text: full }).catch(() => {});
+  } else {
+    navigator.clipboard.writeText(full).then(() => alert('Copied to clipboard! 📋'));
+  }
+  state.sharesCount++;
+  checkMissions();
+  checkBadges();
+  render();
+}
+
+// Render functions
+function renderHype() {
+  const globalCount = 4715 + state.totalTaps * 347;
+  const pct = Math.min(globalCount / 2500000 * 100, 100);
+  return `
+    <div class="pill">⚽ FIFA WORLD CUP 2026</div>
+    <div>
+      <div class="title">TIM<br>PAYNE</div>
+      <div class="subtitle">The People's Player · <span class="accent">All Whites</span> · Group G</div>
+    </div>
+    <div class="card">
+      <div class="card-label">TIM'S ARMY — GLOBAL SUPPORT</div>
+      <div class="counter-row">
+        <div class="counter-old">4.7K</div>
+        <div class="counter-arrow">→</div>
+        <div class="counter-big" id="counter-big">${fmt(globalCount)}</div>
+      </div>
+      <div class="progress-track"><div class="progress-fill" id="progress-fill" style="width:${pct}%"></div></div>
+      <div class="counter-hint">You've tapped ${state.totalTaps.toLocaleString()} times · Every tap counts</div>
+    </div>
+    <button class="tap-btn" id="tap-btn">
+      <span class="tap-emoji">🇳🇿</span>
+      <span class="tap-label">TAP FOR TIM</span>
+      <span class="tap-sub">+1 to the army</span>
+    </button>
+    <div class="stats-row">
+      <div class="stat-cell"><div class="stat-val">${state.sessionTaps}</div><div class="stat-lbl">Today</div></div>
+      <div class="stat-cell"><div class="stat-val">${state.streak}🔥</div><div class="stat-lbl">Streak</div></div>
+      <div class="stat-cell"><div class="stat-val">${state.points}</div><div class="stat-lbl">Points</div></div>
+    </div>
+    <div class="card chant-card">
+      <div class="chant-quote">"</div>
+      <div class="chant-text">${CHANTS[state.chantIdx]}</div>
+      <div class="chant-footer">
+        <span class="chant-src">— The internet, 2026</span>
+        <button class="share-inline" onclick="shareText('${CHANTS[state.chantIdx].replace(/'/g,"\\'")}')">📤 Share</button>
+      </div>
+    </div>
+    <div class="section-title">The Legend</div>
+    <div class="facts-grid">
+      ${TIM_FACTS.map(f => `<div class="fact-cell"><div class="fact-emoji">${f.e}</div><div class="fact-val">${f.v}</div><div class="fact-lbl">${f.l}</div></div>`).join('')}
+    </div>
+    <div class="card">
+      <div class="section-title">How it started</div>
+      <div class="story-text">Argentine influencer El Scarso searched every World Cup squad for the least-known player. He found Tim Payne — a right back from Wellington with 4,715 Instagram followers. He asked the internet to follow him. Within 48 hours, Tim hit 2.5 million. Brands piled in. A song was written. T-shirts were printed in Buenos Aires. Tim DMed El Scarso: "Was wondering why my socials were blowing up."</div>
+      <div class="story-tag">No Payne, No Gain. 🏆</div>
+    </div>
+  `;
+}
+
+function renderMissions() {
+  const done = state.completedMissions.length;
+  return `
+    <div class="section-title" style="font-size:28px">Daily Missions</div>
+    <div class="subtitle">${done}/${MISSIONS.length} completed · ${state.points} Payne Points</div>
+    <div class="streak-card">
+      <div class="streak-row">
+        <span style="font-size:28px">🔥</span>
+        <div>
+          <div class="streak-val">${state.streak}-day streak</div>
+          <div class="streak-hint">Come back tomorrow to keep it going</div>
+        </div>
+      </div>
+      <div class="progress-track"><div class="progress-fill" style="width:${Math.min(state.streak/30*100,100)}%"></div></div>
+    </div>
+    ${MISSIONS.map(m => {
+      const progress = m.check(state);
+      const isDone = state.completedMissions.includes(m.id) || progress >= 1;
+      return `<div class="mission-card ${isDone ? 'done' : ''}">
+        <div class="mission-row">
+          <div class="mission-emoji">${m.emoji}</div>
+          <div class="mission-info">
+            <div class="mission-title ${isDone ? 'done' : ''}">${m.title}</div>
+            <div class="mission-desc">${m.desc}</div>
+          </div>
+          <div class="pts-badge">+${m.pts}</div>
+        </div>
+        <div class="mission-track"><div class="mission-fill ${isDone ? 'done' : ''}" style="width:${Math.min(progress*100,100)}%"></div></div>
+        ${isDone ? '<div class="completed-tag">✅ Completed</div>' : ''}
+      </div>`;
+    }).join('')}
+  `;
+}
+
+function renderChants() {
+  return `
+    <div class="section-title" style="font-size:28px">Chants</div>
+    <div class="subtitle">Generate yours or browse fan favourites</div>
+    <div class="card">
+      <div style="font-size:16px;font-weight:700">🎵 Create Your Chant</div>
+      <input class="input" id="chant-name" placeholder="Your name" maxlength="30" />
+      <input class="input" id="chant-country" placeholder="Your country (optional)" maxlength="30" />
+      <button class="btn-primary" id="generate-btn">Generate Chant 🎶</button>
+    </div>
+    ${state.generatedChant ? `
+    <div class="card" style="border-color:var(--border-active)">
+      <div class="generated-text">${state.generatedChant}</div>
+      <button class="btn-primary" onclick="shareText(document.querySelector('.generated-text').textContent)">📤 Share This Chant</button>
+    </div>` : ''}
+    <div class="section-title">Fan Chants</div>
+    <div class="subtitle">Viewed today: ${state.chantsViewed}</div>
+    <div class="card chant-card" id="fan-chant-card" style="cursor:pointer">
+      <div class="chant-quote">"</div>
+      <div class="chant-text">${CHANTS[state.fanChantIdx]}</div>
+      <div class="chant-footer">
+        <span class="chant-src">— Tap to cycle</span>
+        <span class="chant-src">${state.fanChantIdx + 1}/${CHANTS.length}</span>
+      </div>
+    </div>
+    <button class="btn-outline" onclick="shareText('${CHANTS[state.fanChantIdx].replace(/'/g,"\\'")}')">📤 Share This One</button>
+  `;
+}
+
+function renderProfile() {
+  const stats = [
+    { e:'👆', v: state.totalTaps.toLocaleString(), l:'Total Taps' },
+    { e:'⭐', v: state.points.toLocaleString(), l:'Points' },
+    { e:'🔥', v: `${state.streak}d`, l:'Streak' },
+    { e:'📤', v: state.sharesCount.toString(), l:'Shares' },
+    { e:'🏆', v: `${state.unlockedBadges.length}/${BADGES.length}`, l:'Badges' },
+    { e:'📅', v: new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short'}), l:'Since' },
+  ];
+  return `
+    <div class="section-title" style="font-size:28px">Your Profile</div>
+    <div class="subtitle">Tim Payne's Army · Fan</div>
+    <div class="facts-grid" style="grid-template-columns:repeat(3,1fr)">
+      ${stats.map(s => `<div class="stat-cell"><span style="font-size:22px">${s.e}</span><div class="stat-val" style="font-size:16px">${s.v}</div><div class="stat-lbl">${s.l}</div></div>`).join('')}
+    </div>
+    <div class="section-title">Badge Collection</div>
+    <div class="subtitle">${state.unlockedBadges.length} of ${BADGES.length} unlocked</div>
+    <div class="badge-grid">
+      ${BADGES.map(b => {
+        const unlocked = state.unlockedBadges.includes(b.id);
+        return `<div class="badge-cell ${unlocked ? 'unlocked' : ''}" style="${unlocked ? `border-color:${b.color}20;background:${b.color}10` : ''}">
+          <div class="badge-emoji" style="${unlocked ? '' : 'opacity:0.25'}">${unlocked ? b.emoji : '🔒'}</div>
+          <div class="badge-name" style="${unlocked ? `color:${b.color}` : ''}">${b.name}</div>
+          <div class="badge-rarity" style="color:${unlocked ? b.color : 'var(--text-muted)'}">${b.rarity.slice(0,3).toUpperCase()}</div>
+        </div>`;
+      }).join('')}
+    </div>
+    <div class="legend">
+      ${[['#A0AEC0','common'],['#00D084','rare'],['#9F7AEA','epic'],['#FFD700','legendary']].map(([c,n]) =>
+        `<div class="legend-item" style="color:${c}"><div class="legend-dot" style="background:${c}"></div>${n}</div>`
+      ).join('')}
+    </div>
+    <div class="card">
+      <div style="font-size:15px;font-weight:700">Follow Tim</div>
+      <button class="link-btn" onclick="window.open('https://www.instagram.com/timpayne__','_blank')">📸 Instagram — @timpayne</button>
+      <button class="link-btn" onclick="window.open('https://www.instagram.com/elscarso','_blank')">🇦🇷 El Scarso — @elscarso</button>
+    </div>
+    <div class="card">
+      <div style="font-size:15px;font-weight:700">About</div>
+      <div class="about-text">Unofficial fan app. Not affiliated with FIFA, Wellington Phoenix, or Tim Payne. Made with love by fans, for fans.</div>
+      <div class="version-text">v1.0.0 · No Payne, No Gain 🇳🇿</div>
+    </div>
+  `;
+}
+
+function renderModal() {
+  if (!state.pendingBadge) return '';
+  const b = state.pendingBadge;
+  return `
+    <div class="modal-overlay" id="modal-overlay">
+      <div class="modal-card" style="border-color:${b.color}">
+        <div class="modal-label">🎉 BADGE UNLOCKED</div>
+        <div class="modal-emoji">${b.emoji}</div>
+        <div class="modal-name" style="color:${b.color}">${b.name}</div>
+        <div class="modal-desc">${b.desc}</div>
+        <div class="modal-rarity" style="color:${b.color}">${b.rarity.toUpperCase()}</div>
+        <button class="btn-primary" style="width:auto;padding:12px 32px" onclick="dismissBadge()">Nice! 🎉</button>
+      </div>
+    </div>
+  `;
+}
+
+function renderNav() {
+  const tabs = [
+    { id: 'hype', emoji: '🇳🇿', label: 'Hype' },
+    { id: 'missions', emoji: '⚽', label: 'Missions' },
+    { id: 'chants', emoji: '🎵', label: 'Chants' },
+    { id: 'profile', emoji: '🏆', label: 'Profile' },
+  ];
+  return tabs.map(t => `
+    <button class="nav-item ${state.tab === t.id ? 'active' : ''}" onclick="switchTab('${t.id}')">
+      <span class="nav-emoji">${t.emoji}</span>
+      ${t.label}
+    </button>
+  `).join('');
+}
+
+function render() {
+  const content = document.getElementById('app-content');
+  const nav = document.getElementById('nav');
+  nav.innerHTML = renderNav();
+
+  let html = '';
+  if (state.tab === 'hype') html = renderHype();
+  else if (state.tab === 'missions') html = renderMissions();
+  else if (state.tab === 'chants') html = renderChants();
+  else if (state.tab === 'profile') html = renderProfile();
+  content.innerHTML = html;
+
+  // Modal
+  const existing = document.getElementById('modal-overlay');
+  if (existing) existing.remove();
+  if (state.pendingBadge) {
+    document.body.insertAdjacentHTML('beforeend', renderModal());
+  }
+
+  // Bind events
+  const tapBtn = document.getElementById('tap-btn');
+  if (tapBtn) {
+    tapBtn.addEventListener('click', (e) => {
+      state.totalTaps++;
+      state.sessionTaps++;
+      state.chantIdx = (state.chantIdx + 1) % CHANTS.length;
+      spawnParticle(e);
+      checkMissions();
+      checkBadges();
+      // Update just the counter without full re-render
+      const cb = document.getElementById('counter-big');
+      const pf = document.getElementById('progress-fill');
+      if (cb) {
+        const gc = 4715 + state.totalTaps * 347;
+        cb.textContent = fmt(gc);
+        if (pf) pf.style.width = Math.min(gc/2500000*100,100) + '%';
+      }
+      // Update chant text
+      const ct = content.querySelector('.chant-text');
+      if (ct) ct.textContent = CHANTS[state.chantIdx];
+      // Update stats
+      const vals = content.querySelectorAll('.stat-val');
+      if (vals[0]) vals[0].textContent = state.sessionTaps;
+      if (vals[2]) vals[2].textContent = state.points;
+    });
+  }
+
+  const genBtn = document.getElementById('generate-btn');
+  if (genBtn) {
+    genBtn.addEventListener('click', () => {
+      const name = document.getElementById('chant-name').value.trim();
+      const country = document.getElementById('chant-country').value.trim() || 'Planet Earth';
+      if (!name) { alert('Enter your name to generate a chant!'); return; }
+      const tmpl = CHANT_TEMPLATES[Math.floor(Math.random() * CHANT_TEMPLATES.length)];
+      state.generatedChant = tmpl.replace(/\{name\}/g, name).replace(/\{country\}/g, country);
+      state.chantGenerated = true;
+      checkBadges();
+      render();
+    });
+  }
+
+  const fanChantCard = document.getElementById('fan-chant-card');
+  if (fanChantCard) {
+    fanChantCard.addEventListener('click', () => {
+      state.fanChantIdx = (state.fanChantIdx + 1) % CHANTS.length;
+      state.chantsViewed++;
+      checkMissions();
+      render();
+    });
+  }
+}
+
+function switchTab(tab) {
+  state.tab = tab;
+  window.scrollTo(0, 0);
+  render();
+}
+
+function dismissBadge() {
+  state.pendingBadge = null;
+  render();
+}
+
+// Init
+render();
+</script>
+</body>
+</html>
