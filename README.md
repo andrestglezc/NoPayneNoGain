@@ -2,7 +2,7 @@
 
 > The world's first fan app for Tim Payne — the least-known player at the 2026 FIFA World Cup who became the most followed overnight.
 
-![No Payne No Gain — Panini Card Hero](https://wellingtonphoenix.com/wp-content/uploads/sites/11/2019/08/No.-6_TimPayne_headshot-e1759882643262.png?w=1200)
+![No Payne No Gain — Panini Card Hero](./panini-card.png)
 
 **Live:** [timpaynefans.vercel.app](https://timpaynefans.vercel.app)
 
