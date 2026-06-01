@@ -85,7 +85,7 @@ npx serve web
 ### Native (iOS / Android)
 ```bash
 # Install dependencies
-npm install --legacy-peer-deps
+npm install
 
 # Start dev server
 npx expo start
