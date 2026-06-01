@@ -4,6 +4,21 @@
 
 ## 2026-06-01
 
+### CLAUDE.md project state update
+Updated `CLAUDE.md` with a full project snapshot: both codebases (web + React Native), what's built and working, deploy instructions, and a prioritised what's-next list.
+
+Key findings documented:
+- Two navigation approaches co-exist in the Expo app (`App.tsx` uses React Navigation, `app/_layout.tsx` uses Expo Router) — need to reconcile before shipping native
+- State is session-only; `AsyncStorage` needed for persistence across app restarts
+- EAS is configured but no build has been submitted yet
+
+### Daily log update
+Appended this session to `DAILY_LOG.md` and committed both files to `master`.
+
+---
+
+## 2026-06-01 (earlier)
+
 ### OG Image meta tags
 Added Open Graph image tags to `web/index.html` for social sharing previews when the app URL is pasted into Twitter, iMessage, WhatsApp, etc.
 
