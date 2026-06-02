@@ -6,7 +6,6 @@
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "dark",
-    "scheme": "nopayne",
     "splash": {
       "backgroundColor": "#070A0D",
       "resizeMode": "contain"
@@ -30,12 +29,10 @@
       "bundler": "metro"
     },
     "plugins": [
-      "expo-font"
+      "expo-font",
+      "expo-dev-client"
     ],
     "extra": {
-      "router": {
-        "origin": false
-      },
       "eas": {
         "projectId": "e070032d-3d5c-4743-9ecf-078dbed2f39e"
       }

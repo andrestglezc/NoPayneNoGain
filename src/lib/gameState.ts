@@ -1,3 +1,4 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { BADGES, Badge, DAILY_MISSIONS } from '../constants/gameData';
 
 export interface GameState {
@@ -14,6 +15,8 @@ export interface GameState {
   installDate: string;
   dailyMissionDate: string;
 }
+
+const STORAGE_KEY = 'nopayne_state';
 
 function getToday(): string {
   return new Date().toISOString().split('T')[0];
@@ -34,11 +37,43 @@ const defaultState = (): GameState => ({
   dailyMissionDate: getToday(),
 });
 
-export async function loadState(): Promise<GameState> {
-  return defaultState();
+function daysBetween(a: string, b: string): number {
+  return Math.round((Date.parse(b) - Date.parse(a)) / 86_400_000);
 }
 
-export async function saveState(_state: GameState): Promise<void> {}
+export async function loadState(): Promise<GameState> {
+  try {
+    const raw = await AsyncStorage.getItem(STORAGE_KEY);
+    if (!raw) return defaultState();
+
+    const saved: GameState = JSON.parse(raw);
+    const today = getToday();
+    const gap = daysBetween(saved.lastActiveDate, today);
+
+    if (gap === 1) saved.streak += 1;
+    else if (gap > 1) saved.streak = 1;
+
+    saved.lastActiveDate = today;
+    saved.sessionTaps = 0;
+
+    if (saved.dailyMissionDate !== today) {
+      saved.completedMissions = [];
+      saved.chantsViewed = 0;
+      saved.chantGenerated = false;
+      saved.dailyMissionDate = today;
+    }
+
+    return saved;
+  } catch {
+    return defaultState();
+  }
+}
+
+export async function saveState(state: GameState): Promise<void> {
+  try {
+    await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  } catch {}
+}
 
 export function checkBadgeUnlocks(state: GameState): Badge[] {
   return BADGES.filter(badge => {

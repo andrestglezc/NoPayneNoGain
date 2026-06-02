@@ -1,1 +1,9 @@
-{"name": "no-payne-no-gain"}
+{
+  "name": "no-payne-no-gain",
+  "rewrites": [
+    { "source": "/privacy", "destination": "/privacy.html" },
+    { "source": "/terms", "destination": "/terms.html" },
+    { "source": "/data-compliance", "destination": "/data-compliance.html" },
+    { "source": "/trademark", "destination": "/trademark.html" }
+  ]
+}
