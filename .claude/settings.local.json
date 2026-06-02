@@ -1,0 +1,24 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(vercel *)",
+      "Bash(gh repo *)",
+      "Bash(git add *)",
+      "Bash(git commit *)",
+      "Bash(git push *)",
+      "Bash(git *)",
+      "Bash(python3 -c \"import sys,json; d=json.load\\(sys.stdin\\); print\\(json.dumps\\({k:d[k] for k in ['name','version','scripts','dependencies'] if k in d}, indent=2\\)\\)\")",
+      "Bash(npm install *)",
+      "Bash(npx expo *)",
+      "Bash(npm uninstall *)",
+      "WebFetch(domain:docs.expo.dev)",
+      "WebSearch",
+      "WebFetch(domain:expo.dev)",
+      "Bash(npx react-native *)",
+      "Bash(node *)",
+      "Bash(sips *)",
+      "Bash(ffmpeg -i /Users/andresthomas/Desktop/PROJECTS/NoPayneNoGain/assets/icon.png -vf format=rgb24 /Users/andresthomas/Desktop/PROJECTS/NoPayneNoGain/assets/icon_noalpha.png)",
+      "Bash(npx sharp-cli *)"
+    ]
+  }
+}
