@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=1200" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@700&family=DM+Sans:wght@400;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { width: 1200px; height: 630px; overflow: hidden; }
+    body {
+      background: #0A0A0A;
+      font-family: 'DM Sans', sans-serif;
+      position: relative;
+    }
+    .accent-bar {
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 6px;
+      background: #F0C130;
+    }
+    .layout {
+      width: 1200px;
+      height: 630px;
+      padding: 64px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    /* TOP */
+    .top {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+    .top-left { display: flex; flex-direction: column; }
+    .eyebrow {
+      font-size: 13px;
+      font-weight: 700;
+      color: #F0C130;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+    .headline {
+      font-family: 'Oswald', sans-serif;
+      font-size: 68px;
+      font-weight: 700;
+      color: #FFFFFF;
+      line-height: 0.95;
+      letter-spacing: -2px;
+    }
+    .tagline {
+      font-size: 22px;
+      font-weight: 400;
+      color: #888888;
+      margin-top: 16px;
+    }
+    .top-right { display: flex; flex-direction: column; text-align: right; }
+    .followers-label {
+      font-size: 11px;
+      color: #666666;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+    .followers-old {
+      font-size: 14px;
+      color: #444444;
+      text-decoration: line-through;
+      margin-bottom: 4px;
+    }
+    .followers-new {
+      font-family: 'Oswald', sans-serif;
+      font-size: 80px;
+      font-weight: 700;
+      color: #F0C130;
+      line-height: 1;
+    }
+    .followers-caption {
+      font-size: 13px;
+      color: #666666;
+      margin-top: 4px;
+    }
+    /* BOTTOM */
+    .bottom {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid #1E1E1E;
+      padding-top: 24px;
+    }
+    .bottom-left { display: flex; flex-direction: column; }
+    .bottom-title {
+      font-size: 24px;
+      font-weight: 700;
+      color: #FFFFFF;
+    }
+    .bottom-sub {
+      font-size: 14px;
+      color: #666666;
+      margin-top: 6px;
+    }
+    .cta-pill {
+      background: #F0C130;
+      color: #0A0A0A;
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 800;
+      font-size: 18px;
+      padding: 14px 32px;
+      border-radius: 10px;
+      white-space: nowrap;
+    }
+  </style>
+</head>
+<body>
+  <div class="accent-bar"></div>
+  <div class="layout">
+    <div class="top">
+      <div class="top-left">
+        <div class="eyebrow">MUNDIAL 2026 · NUEVA ZELANDA</div>
+        <div class="headline">¿Cuánto sabés<br>de Tim Payne?</div>
+        <div class="tagline">El mundo lo eligió.</div>
+      </div>
+      <div class="top-right">
+        <div class="followers-label">SEGUIDORES INSTAGRAM</div>
+        <div class="followers-old">4,715</div>
+        <div class="followers-new">4.7M+</div>
+        <div class="followers-caption">en 48 horas</div>
+      </div>
+    </div>
+    <div class="bottom">
+      <div class="bottom-left">
+        <div class="bottom-title">Quiz · Predicciones · Hype 🇳🇿</div>
+        <div class="bottom-sub">El juego del Mundial</div>
+      </div>
+      <div class="cta-pill">timpaynefans.com</div>
+    </div>
+  </div>
+</body>
+</html>
