@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
@@ -14,39 +14,32 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&family=DM+Sans:wght@400;500;600;700&family=Oswald:wght@600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-Avb2QiuDEEvB4bZJYdft2mNjVShBftLdPG8FJ0V7irTLQ8Uo0qcPxh4Plh7eqjyG6O0tZRqF8TpBCb3V2eA==" crossorigin="anonymous" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
-      --bg: #070A0D;
-      --bg-card: rgba(255,255,255,0.06);
-      --bg-elevated: rgba(13,17,23,0.85);
-      --border: rgba(255,255,255,0.12);
-      --border-active: rgba(240,193,48,0.35);
-      --border-hover: rgba(255,255,255,0.2);
-      --text: #FFFFFF;
-      --text-secondary: rgba(255,255,255,0.55);
-      --text-muted: rgba(255,255,255,0.3);
+      --bg: #F5F4F0;
+      --surface: #FFFFFF;
+      --surface-2: #F0EEE8;
+      --border: rgba(0,0,0,0.08);
+      --border-active: rgba(240,193,48,0.4);
+      --text: #0A0A0A;
+      --text-secondary: #888888;
+      --text-muted: #BBBBBB;
       --accent: #F0C130;
-      --accent-dim: rgba(240,193,48,0.1);
-      --gold: #FFD700;
-      --gold-dim: rgba(255,215,0,0.12);
-      --white-08: rgba(255,255,255,0.08);
-      --white-12: rgba(255,255,255,0.12);
-      --white-20: rgba(255,255,255,0.2);
-      --glass-blur: blur(20px) saturate(180%);
-      --glass-shadow: inset 0 1px 0 rgba(255,255,255,0.15), inset 0 -1px 0 rgba(0,0,0,0.1), 0 8px 32px rgba(0,0,0,0.4);
+      --accent-dark: #C8960C;
+      --accent-dim: rgba(240,193,48,0.15);
+      --danger: #FF4B4B;
+      --success: #4CAF50;
+      --white-08: #F0EEE8;
+      --white-20: rgba(0,0,0,0.12);
+      --gold-dim: rgba(240,193,48,0.15);
       --glass-radius: 20px;
+      --shadow: 0 2px 16px rgba(0,0,0,0.08);
       --transition-spring: 0.3s cubic-bezier(0.4,0,0.2,1);
     }
     html, body { height: 100%; color: var(--text); font-family: 'DM Sans', sans-serif; }
-    body {
-      display: flex; justify-content: center;
-      background:
-        radial-gradient(ellipse at 30% 20%, rgba(240,193,48,0.04) 0%, transparent 60%),
-        radial-gradient(ellipse at 70% 80%, rgba(255,255,255,0.02) 0%, transparent 60%),
-        #070A0D;
-      min-height: 100vh;
-    }
+    body { display: flex; justify-content: center; background: #F5F4F0; min-height: 100vh; }
     #root { width: 100%; max-width: 430px; min-height: 100vh; position: relative; }
 
     @keyframes floatUp {
@@ -57,323 +50,216 @@
     @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
     @keyframes slideUp { from { opacity: 0; transform: translateY(100px); } to { opacity: 1; transform: translateY(0); } }
 
-    .app { padding: 52px 24px 100px; max-width: 390px; margin: 0 auto; display: flex; flex-direction: column; gap: 14px; animation: fadeIn 0.4s ease; }
+    .app { padding: 52px 24px 100px; max-width: 390px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px; animation: fadeIn 0.4s ease; }
 
-    /* Nav — glass */
+    /* Nav */
     .nav {
       position: fixed; bottom: 0; left: 50%; transform: translateX(-50%);
       width: 100%; max-width: 430px;
-      backdrop-filter: blur(24px) saturate(200%);
-      -webkit-backdrop-filter: blur(24px) saturate(200%);
-      background: rgba(7,10,13,0.6);
-      border-top: 1px solid rgba(255,255,255,0.1);
-      box-shadow: inset 0 1px 0 rgba(255,255,255,0.08), 0 -4px 24px rgba(0,0,0,0.5);
-      display: flex; height: 82px; padding-bottom: 20px; z-index: 100;
+      background: #FFFFFF;
+      border-top: 1px solid rgba(0,0,0,0.08);
+      box-shadow: 0 -2px 16px rgba(0,0,0,0.06);
+      display: flex; height: 72px; padding-bottom: 12px; z-index: 100;
     }
     .nav-item {
-      flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;
+      flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;
       cursor: pointer; border: none; background: none;
-      color: var(--text-muted); font-family: 'DM Sans', sans-serif; font-size: 10px; font-weight: 500; letter-spacing: 0.5px;
-      opacity: 0.45; transition: opacity 0.2s ease, color 0.2s ease, background 0.2s ease;
-      padding-top: 8px; border-radius: 16px; margin: 6px 4px 0;
+      color: #888888; font-family: 'DM Sans', sans-serif; font-size: 11px; font-weight: 500; letter-spacing: 0.3px;
+      transition: color 0.2s ease, font-weight 0.1s ease;
+      padding-top: 8px; border-radius: 12px; margin: 6px 4px 0;
     }
-    .nav-item.active {
-      opacity: 1; color: var(--accent);
-      background: rgba(240,193,48,0.1);
-      border: 1px solid rgba(240,193,48,0.18);
-    }
-    .nav-emoji { font-size: 22px; }
+    .nav-item.active { color: #C8960C; font-weight: 700; }
 
     /* Typography */
-    .pill { display: inline-flex; align-self: flex-start; background: var(--white-08); border: 1px solid var(--white-12); border-radius: 100px; padding: 4px 12px; font-size: 10px; font-weight: 600; color: var(--text-muted); letter-spacing: 1.5px; }
-    .title { font-family: 'Playfair Display', serif; font-style: italic; font-size: clamp(52px, 16vw, 72px); line-height: 0.9; color: var(--text); letter-spacing: -2px; }
-    .subtitle { font-size: 13px; color: var(--text-muted); margin-top: 8px; }
-    .accent { color: var(--accent); }
-    .section-title { font-family: 'Playfair Display', serif; font-size: 20px; color: var(--text); margin-top: 8px; }
+    .pill { display: inline-flex; align-self: flex-start; background: #F0EEE8; border-radius: 100px; padding: 4px 12px; font-size: 11px; font-weight: 600; color: #888888; letter-spacing: 0.08em; text-transform: uppercase; }
+    .title { font-family: 'Playfair Display', serif; font-style: italic; font-size: clamp(52px, 16vw, 72px); line-height: 0.9; color: #0A0A0A; letter-spacing: -2px; }
+    .subtitle { font-size: 15px; color: #888888; margin-top: 8px; }
+    .accent { color: #C8960C; }
+    .section-title { font-family: 'DM Sans', sans-serif; font-size: 22px; font-weight: 700; color: #0A0A0A; margin-top: 8px; }
 
-    /* Cards — glass */
+    /* Cards */
     .card {
-      backdrop-filter: var(--glass-blur);
-      -webkit-backdrop-filter: var(--glass-blur);
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      box-shadow: var(--glass-shadow);
-      border-radius: var(--glass-radius);
-      padding: 16px; display: flex; flex-direction: column; gap: 8px;
+      background: #FFFFFF;
+      box-shadow: 0 2px 16px rgba(0,0,0,0.08);
+      border-radius: 20px;
+      padding: 28px; display: flex; flex-direction: column; gap: 12px;
       position: relative; overflow: hidden;
-      transition: border-color var(--transition-spring), transform var(--transition-spring);
+      transition: box-shadow var(--transition-spring), transform var(--transition-spring);
     }
-    .card::before {
-      content: ''; position: absolute; inset: 0;
-      background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 50%);
-      border-radius: inherit; pointer-events: none;
-    }
-    .card:hover { border-color: var(--border-hover); transform: scale(1.01); }
+    .card:hover { box-shadow: 0 6px 28px rgba(0,0,0,0.12); transform: translateY(-1px); }
     .card > * { position: relative; }
-    .card.accent-border { border-color: var(--border-active); background: rgba(240,193,48,0.06); }
-    .card-label { font-size: 10px; font-weight: 600; color: var(--text-muted); letter-spacing: 2px; text-transform: uppercase; }
+    .card.accent-border { border: 2px solid rgba(240,193,48,0.35); background: #FFFBEE; }
+    .card-label { font-size: 12px; font-weight: 500; color: #888888; letter-spacing: 0.08em; text-transform: uppercase; }
 
-    /* Counter */
-    .counter-row { display: flex; align-items: center; gap: 12px; }
-    .counter-old { font-family: 'Playfair Display', serif; font-style: italic; font-size: 20px; color: var(--white-20); text-decoration: line-through; }
-    .counter-arrow { color: var(--white-20); font-size: 16px; }
-    .counter-big { font-family: 'Playfair Display', serif; font-style: italic; font-size: clamp(36px, 10vw, 48px); color: var(--accent); letter-spacing: -1px; transition: color 0.3s; }
-    .progress-track { height: 3px; background: var(--white-08); border-radius: 99px; overflow: hidden; }
+    .progress-track { height: 4px; background: #F0EEE8; border-radius: 99px; overflow: hidden; }
     .progress-fill { height: 100%; background: var(--accent); border-radius: 99px; transition: width 0.1s linear; }
-    .counter-hint { font-size: 11px; color: var(--text-muted); }
-
-    /* Tap button — glass with gold glow */
-    .tap-btn {
-      backdrop-filter: var(--glass-blur);
-      -webkit-backdrop-filter: var(--glass-blur);
-      background: rgba(61,47,0,0.4);
-      border: 1px solid var(--border-active); border-radius: 28px; padding: 24px;
-      display: flex; flex-direction: column; align-items: center; gap: 6px;
-      cursor: pointer; position: relative; overflow: hidden;
-      box-shadow:
-        inset 0 1px 0 rgba(255,255,255,0.15),
-        inset 0 -1px 0 rgba(0,0,0,0.1),
-        0 0 40px 8px rgba(240,193,48,0.2),
-        0 8px 32px rgba(0,0,0,0.4);
-      transition: transform 0.15s cubic-bezier(0.34,1.3,0.64,1), box-shadow 0.3s ease, border-color 0.3s ease;
-      user-select: none; -webkit-tap-highlight-color: transparent;
-    }
-    .tap-btn::before {
-      content: ''; position: absolute; inset: 0;
-      background: linear-gradient(135deg, rgba(255,255,255,0.12) 0%, transparent 50%);
-      border-radius: inherit; pointer-events: none;
-    }
-    .tap-btn:hover { border-color: rgba(240,193,48,0.55); }
-    .tap-btn:active {
-      transform: scale(0.96);
-      box-shadow: inset 0 1px 0 rgba(255,255,255,0.1), 0 0 16px 4px rgba(240,193,48,0.12), 0 4px 16px rgba(0,0,0,0.4);
-    }
-    .tap-emoji { font-size: 44px; pointer-events: none; position: relative; z-index: 1; }
-    .tap-label { font-size: 15px; font-weight: 700; color: var(--accent); letter-spacing: 2px; text-transform: uppercase; pointer-events: none; position: relative; z-index: 1; }
-    .tap-sub { font-size: 12px; color: var(--text-muted); pointer-events: none; position: relative; z-index: 1; }
 
     /* Stats row */
-    .stats-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+    .stats-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
     .stat-cell {
-      backdrop-filter: var(--glass-blur);
-      -webkit-backdrop-filter: var(--glass-blur);
-      background: var(--bg-card); border: 1px solid var(--border);
-      box-shadow: var(--glass-shadow); border-radius: 14px; padding: 12px;
+      background: #FFFFFF; box-shadow: 0 2px 16px rgba(0,0,0,0.08);
+      border-radius: 16px; padding: 16px;
       display: flex; flex-direction: column; align-items: center; gap: 2px;
-      position: relative; overflow: hidden;
-      transition: border-color var(--transition-spring), transform var(--transition-spring);
+      transition: box-shadow var(--transition-spring), transform var(--transition-spring);
     }
-    .stat-cell::before {
-      content: ''; position: absolute; inset: 0;
-      background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 50%);
-      border-radius: inherit; pointer-events: none;
-    }
-    .stat-cell:hover { border-color: var(--border-hover); transform: scale(1.02); }
+    .stat-cell:hover { box-shadow: 0 6px 24px rgba(0,0,0,0.12); transform: translateY(-1px); }
     .stat-cell > * { position: relative; }
-    .stat-val { font-size: 18px; font-weight: 700; }
-    .stat-lbl { font-size: 10px; color: var(--text-muted); letter-spacing: 0.5px; text-transform: uppercase; }
+    .stat-val { font-size: 20px; font-weight: 800; color: #0A0A0A; }
+    .stat-lbl { font-size: 11px; color: #888888; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 500; }
 
     /* Chant */
-    .chant-quote { font-family: 'Playfair Display', serif; font-style: italic; font-size: 36px; color: var(--accent-dim); line-height: 1; position: absolute; top: 8px; left: 14px; }
+    .chant-quote { font-family: 'Playfair Display', serif; font-style: italic; font-size: 36px; color: rgba(240,193,48,0.3); line-height: 1; position: absolute; top: 8px; left: 14px; }
     .chant-card { position: relative; }
-    .chant-text { font-family: 'Playfair Display', serif; font-style: italic; font-size: 15px; color: var(--text-secondary); line-height: 1.5; padding-top: 10px; padding-left: 4px; }
+    .chant-text { font-family: 'Playfair Display', serif; font-style: italic; font-size: 15px; color: #1A1A1A; line-height: 1.5; padding-top: 10px; padding-left: 4px; }
     .chant-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 10px; }
-    .chant-src { font-size: 11px; color: var(--text-muted); }
+    .chant-src { font-size: 11px; color: #888888; }
 
     /* Facts grid */
-    .facts-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+    .facts-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
     .fact-cell {
-      backdrop-filter: var(--glass-blur);
-      -webkit-backdrop-filter: var(--glass-blur);
-      background: var(--bg-card); border: 1px solid var(--border);
-      box-shadow: var(--glass-shadow); border-radius: 14px; padding: 12px;
+      background: #FFFFFF; box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+      border-radius: 16px; padding: 14px;
       display: flex; flex-direction: column; align-items: center; gap: 4px; text-align: center;
-      position: relative; overflow: hidden;
-      transition: border-color var(--transition-spring), transform var(--transition-spring);
+      transition: box-shadow var(--transition-spring), transform var(--transition-spring);
     }
-    .fact-cell::before {
-      content: ''; position: absolute; inset: 0;
-      background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 50%);
-      border-radius: inherit; pointer-events: none;
-    }
-    .fact-cell:hover { border-color: var(--border-hover); transform: scale(1.02); }
+    .fact-cell:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.1); transform: translateY(-1px); }
     .fact-cell > * { position: relative; }
     .fact-emoji { font-size: 20px; }
-    .fact-val { font-size: 11px; font-weight: 700; }
-    .fact-lbl { font-size: 9px; color: var(--text-muted); letter-spacing: 0.8px; text-transform: uppercase; }
+    .fact-val { font-size: 11px; font-weight: 700; color: #0A0A0A; }
+    .fact-lbl { font-size: 9px; color: #888888; letter-spacing: 0.8px; text-transform: uppercase; font-weight: 500; }
 
     /* Missions */
     .mission-card {
-      backdrop-filter: var(--glass-blur);
-      -webkit-backdrop-filter: var(--glass-blur);
-      background: var(--bg-card); border: 1px solid var(--border);
-      box-shadow: var(--glass-shadow); border-radius: var(--glass-radius); padding: 16px;
+      background: #FFFFFF; box-shadow: 0 2px 16px rgba(0,0,0,0.08);
+      border-radius: 20px; padding: 20px;
       display: flex; flex-direction: column; gap: 10px;
-      position: relative; overflow: hidden;
-      transition: border-color var(--transition-spring), transform var(--transition-spring);
+      transition: box-shadow var(--transition-spring), transform var(--transition-spring);
     }
-    .mission-card::before {
-      content: ''; position: absolute; inset: 0;
-      background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 50%);
-      border-radius: inherit; pointer-events: none;
-    }
-    .mission-card.done { border-color: var(--border-active); background: rgba(240,193,48,0.05); }
-    .mission-card:hover { border-color: var(--border-hover); transform: scale(1.01); }
+    .mission-card.done { background: #FFFBEE; border: 1.5px solid rgba(240,193,48,0.3); }
+    .mission-card:hover { box-shadow: 0 6px 24px rgba(0,0,0,0.12); transform: translateY(-1px); }
     .mission-card > * { position: relative; }
     .mission-row { display: flex; align-items: center; gap: 12px; }
     .mission-emoji { font-size: 28px; }
     .mission-info { flex: 1; }
-    .mission-title { font-size: 15px; font-weight: 700; }
-    .mission-title.done { color: var(--accent); }
-    .mission-desc { font-size: 12px; color: var(--text-muted); }
-    .pts-badge { background: var(--gold-dim); border-radius: 100px; padding: 4px 10px; font-size: 12px; font-weight: 700; color: var(--gold); white-space: nowrap; }
-    .mission-track { height: 3px; background: var(--white-08); border-radius: 99px; overflow: hidden; }
-    .mission-fill { height: 100%; border-radius: 99px; background: var(--text-muted); }
+    .mission-title { font-size: 15px; font-weight: 700; color: #0A0A0A; }
+    .mission-title.done { color: #C8960C; }
+    .mission-desc { font-size: 13px; color: #888888; }
+    .pts-badge { background: rgba(240,193,48,0.15); border-radius: 100px; padding: 4px 10px; font-size: 12px; font-weight: 700; color: #C8960C; white-space: nowrap; }
+    .mission-track { height: 4px; background: #F0EEE8; border-radius: 99px; overflow: hidden; }
+    .mission-fill { height: 100%; border-radius: 99px; background: #BBBBBB; }
     .mission-fill.done { background: var(--accent); }
-    .completed-tag { font-size: 11px; font-weight: 600; color: var(--accent); letter-spacing: 0.5px; }
+    .completed-tag { font-size: 11px; font-weight: 600; color: #C8960C; letter-spacing: 0.5px; }
 
-    /* Inputs — glass */
+    /* Inputs */
     .input {
-      backdrop-filter: blur(16px) saturate(160%);
-      -webkit-backdrop-filter: blur(16px) saturate(160%);
-      background: rgba(255,255,255,0.06);
-      border: 1px solid var(--border);
-      box-shadow: inset 0 1px 0 rgba(255,255,255,0.08), inset 0 -1px 0 rgba(0,0,0,0.1);
+      background: #F0EEE8; border: 1.5px solid transparent;
       border-radius: 14px; padding: 14px;
-      font-family: 'DM Sans', sans-serif; font-size: 15px; color: var(--text);
+      font-family: 'DM Sans', sans-serif; font-size: 15px; color: #0A0A0A;
       width: 100%; outline: none;
       transition: border-color 0.2s ease, box-shadow 0.2s ease;
     }
-    .input::placeholder { color: var(--text-muted); }
-    .input:focus {
-      border-color: rgba(240,193,48,0.4);
-      box-shadow: inset 0 1px 0 rgba(255,255,255,0.1), 0 0 0 3px rgba(240,193,48,0.08);
-    }
+    .input::placeholder { color: #BBBBBB; }
+    .input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(240,193,48,0.15); }
     .btn-primary {
-      background: var(--accent); border: none; border-radius: 100px; padding: 14px;
-      font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 700; color: #070A0D;
+      background: var(--accent); border: none; border-radius: 14px; padding: 16px;
+      font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 700; color: #0A0A0A;
       cursor: pointer; width: 100%;
-      transition: opacity 0.2s, transform 0.15s cubic-bezier(0.34,1.3,0.64,1);
+      transition: background 0.2s, transform 0.15s cubic-bezier(0.34,1.3,0.64,1);
     }
-    .btn-primary:hover { opacity: 0.9; }
+    .btn-primary:hover { background: #C8960C; color: #FFFFFF; }
     .btn-primary:active { transform: scale(0.97); }
     .btn-outline {
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      background: rgba(255,255,255,0.06); border: 1px solid var(--border); border-radius: 100px; padding: 12px;
-      font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 600; color: var(--text-secondary);
-      cursor: pointer; width: 100%;
-      transition: border-color 0.2s ease, opacity 0.2s ease;
+      background: #F0EEE8; border: none; border-radius: 14px; padding: 14px;
+      font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 600; color: #0A0A0A;
+      cursor: pointer; width: 100%; transition: background 0.2s ease;
     }
-    .btn-outline:hover { border-color: var(--border-hover); }
+    .btn-outline:hover { background: #E8E4DC; }
     .share-inline {
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      background: var(--accent-dim); border: 1px solid rgba(240,193,48,0.2); border-radius: 100px; padding: 6px 14px;
-      font-family: 'DM Sans', sans-serif; font-size: 12px; font-weight: 600; color: var(--accent);
-      cursor: pointer; transition: border-color 0.2s ease;
+      background: rgba(240,193,48,0.15); border: none; border-radius: 100px; padding: 6px 14px;
+      font-family: 'DM Sans', sans-serif; font-size: 12px; font-weight: 600; color: #C8960C;
+      cursor: pointer; transition: background 0.2s ease;
     }
-    .share-inline:hover { border-color: rgba(240,193,48,0.45); }
-    .generated-text { font-family: 'Playfair Display', serif; font-style: italic; font-size: 16px; line-height: 1.5; white-space: pre-line; }
+    .share-inline:hover { background: rgba(240,193,48,0.28); }
+    .generated-text { font-family: 'Playfair Display', serif; font-style: italic; font-size: 16px; line-height: 1.5; white-space: pre-line; color: #1A1A1A; }
 
     /* Profile / Badges */
     .badge-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
     .badge-cell {
-      backdrop-filter: var(--glass-blur);
-      -webkit-backdrop-filter: var(--glass-blur);
-      background: var(--bg-card); border: 1px solid var(--border);
-      box-shadow: var(--glass-shadow); border-radius: 14px; padding: 10px;
+      background: #FFFFFF; box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+      border-radius: 14px; padding: 10px;
       display: flex; flex-direction: column; align-items: center; gap: 3px;
-      position: relative; overflow: hidden;
-      transition: border-color var(--transition-spring), transform var(--transition-spring);
+      transition: box-shadow var(--transition-spring), transform var(--transition-spring);
     }
-    .badge-cell::before {
-      content: ''; position: absolute; inset: 0;
-      background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 50%);
-      border-radius: inherit; pointer-events: none;
-    }
-    .badge-cell.unlocked { border-color: var(--border-active); }
-    .badge-cell:hover { border-color: var(--border-hover); transform: scale(1.05); }
+    .badge-cell.unlocked { border: 1.5px solid rgba(240,193,48,0.35); }
+    .badge-cell:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.1); transform: scale(1.05); }
     .badge-cell > * { position: relative; }
     .badge-emoji { font-size: 26px; }
-    .badge-name { font-size: 8px; font-weight: 600; text-align: center; color: var(--text-muted); }
+    .badge-name { font-size: 8px; font-weight: 600; text-align: center; color: #888888; }
     .badge-rarity { font-size: 7px; font-weight: 700; letter-spacing: 1px; }
     .legend { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
-    .legend-item { display: flex; align-items: center; gap: 4px; font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; }
+    .legend-item { display: flex; align-items: center; gap: 4px; font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; color: #888888; }
     .legend-dot { width: 6px; height: 6px; border-radius: 50%; }
-    .link-btn { background: none; border: none; font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500; color: var(--accent); cursor: pointer; text-align: left; padding: 2px 0; }
+    .link-btn { background: none; border: none; font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500; color: #C8960C; cursor: pointer; text-align: left; padding: 2px 0; }
 
-    /* Badge modal — deep glass */
+    /* Badge modal */
     .modal-overlay {
-      position: fixed; inset: 0;
-      background: rgba(0,0,0,0.75);
-      backdrop-filter: blur(40px) saturate(150%);
-      -webkit-backdrop-filter: blur(40px) saturate(150%);
+      position: fixed; inset: 0; background: rgba(0,0,0,0.35);
       display: flex; align-items: center; justify-content: center; padding: 32px;
       z-index: 200; animation: fadeIn 0.2s ease;
     }
     .modal-card {
-      backdrop-filter: blur(40px) saturate(200%);
-      -webkit-backdrop-filter: blur(40px) saturate(200%);
-      background: rgba(255,255,255,0.1);
-      border: 2px solid rgba(255,255,255,0.18);
-      box-shadow: inset 0 1px 0 rgba(255,255,255,0.2), inset 0 -1px 0 rgba(0,0,0,0.15), 0 24px 64px rgba(0,0,0,0.6);
+      background: #FFFFFF; box-shadow: 0 24px 80px rgba(0,0,0,0.18);
       border-radius: 28px; padding: 32px;
       display: flex; flex-direction: column; align-items: center; gap: 8px;
-      width: 100%; max-width: 300px;
-      position: relative; overflow: hidden;
-      animation: slideUp 0.3s ease;
-    }
-    .modal-card::before {
-      content: ''; position: absolute; inset: 0;
-      background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, transparent 50%);
-      border-radius: inherit; pointer-events: none;
+      width: 100%; max-width: 300px; animation: slideUp 0.3s ease;
     }
     .modal-card > * { position: relative; }
-    .modal-label { font-size: 11px; font-weight: 600; color: var(--text-muted); letter-spacing: 2px; }
+    .modal-label { font-size: 11px; font-weight: 600; color: #888888; letter-spacing: 2px; }
     .modal-emoji { font-size: 64px; margin: 8px 0; }
-    .modal-name { font-family: 'Playfair Display', serif; font-size: 24px; text-align: center; }
-    .modal-desc { font-size: 14px; color: var(--text-secondary); text-align: center; }
+    .modal-name { font-family: 'Playfair Display', serif; font-size: 24px; text-align: center; color: #0A0A0A; }
+    .modal-desc { font-size: 14px; color: #888888; text-align: center; }
     .modal-rarity { font-size: 11px; font-weight: 700; letter-spacing: 2px; margin-bottom: 8px; }
 
-    /* Particle */
-    .particle { position: fixed; font-size: 28px; pointer-events: none; animation: floatUp 0.9s ease-out forwards; z-index: 150; }
-
-    /* Streak card — glass with gold tint */
+    /* Streak card */
     .streak-card {
-      backdrop-filter: var(--glass-blur);
-      -webkit-backdrop-filter: var(--glass-blur);
-      background: rgba(240,193,48,0.05); border: 1px solid var(--border-active);
-      box-shadow: var(--glass-shadow); border-radius: var(--glass-radius); padding: 16px;
+      background: #FFFBEE; border: 1.5px solid rgba(240,193,48,0.3);
+      box-shadow: 0 2px 16px rgba(0,0,0,0.06);
+      border-radius: 20px; padding: 20px;
       display: flex; flex-direction: column; gap: 10px;
-      position: relative; overflow: hidden;
-    }
-    .streak-card::before {
-      content: ''; position: absolute; inset: 0;
-      background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 50%);
-      border-radius: inherit; pointer-events: none;
     }
     .streak-card > * { position: relative; }
     .streak-row { display: flex; align-items: center; gap: 12px; }
-    .streak-val { font-size: 16px; font-weight: 700; }
-    .streak-hint { font-size: 12px; color: var(--text-secondary); }
+    .streak-val { font-size: 18px; font-weight: 800; color: #0A0A0A; }
+    .streak-hint { font-size: 13px; color: #888888; }
 
     /* Story / About */
-    .story-text { font-size: 13px; color: var(--text-secondary); line-height: 1.6; }
-    .story-tag { font-family: 'Playfair Display', serif; font-style: italic; font-size: 14px; color: var(--accent); }
-    .about-text { font-size: 13px; color: var(--text-secondary); line-height: 1.5; }
-    .version-text { font-size: 11px; color: var(--text-muted); }
-
-    /* Tim's Card */
-    @keyframes cardFadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
-    .tim-card { animation: cardFadeIn 0.35s cubic-bezier(0.34,1.3,0.64,1); }
-    .tim-card-wrap { display: flex; justify-content: center; padding: 8px 0 4px; }
+    .story-text { font-size: 15px; color: #1A1A1A; line-height: 1.6; }
+    .story-tag { font-family: 'Playfair Display', serif; font-style: italic; font-size: 15px; color: #C8960C; }
+    .about-text { font-size: 14px; color: #888888; line-height: 1.5; }
+    .version-text { font-size: 11px; color: #BBBBBB; }
 
     /* Quiz */
     @keyframes quizFadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes confettiFly { 0% { transform:translate(-50%,-50%) scale(1);opacity:1; } 100% { transform:translate(calc(-50% + var(--dx)),calc(-50% + var(--dy))) scale(0);opacity:0; } }
+    @keyframes floatPlus { 0% { opacity:1;transform:translateX(-50%) translateY(0); } 100% { opacity:0;transform:translateX(-50%) translateY(-65px); } }
+    @keyframes wrongX { 0% { opacity:0;transform:scale(0); } 20% { opacity:1;transform:scale(1.2); } 40% { transform:scale(1); } 70% { opacity:1; } 100% { opacity:0; } }
     .quiz-card { animation: quizFadeIn 0.32s cubic-bezier(0.4,0,0.2,1); }
-    .quiz-answer:hover:not(:disabled) { border-color: rgba(255,255,255,0.22) !important; background: rgba(255,255,255,0.1) !important; }
+    .quiz-answer:hover:not(:disabled) { background: #E8E4DC !important; }
     .quiz-answer:disabled { cursor: default; }
+    .confetti-dot { position:fixed;width:7px;height:7px;border-radius:50%;pointer-events:none;z-index:250;animation:confettiFly 0.65s ease-out forwards; }
+    .plus-one { position:fixed;font-size:22px;font-weight:700;color:#2d9e50;pointer-events:none;z-index:250;transform:translateX(-50%);animation:floatPlus 0.85s ease-out forwards; }
+    .wrong-x { position:fixed;inset:0;display:flex;align-items:center;justify-content:center;font-size:110px;color:rgba(255,75,75,0.72);pointer-events:none;z-index:300;animation:wrongX 1s ease-out forwards; }
+    .combo-badge { display:inline-flex;background:#F0C130;border:none;border-radius:100px;padding:3px 10px;font-size:12px;font-weight:700;color:#0A0A0A;animation:fadeIn 0.2s ease; }
+
+    /* Quiz category grid */
+    .quiz-category-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+    .quiz-category-card {
+      background: #FFFFFF; box-shadow: 0 2px 16px rgba(0,0,0,0.08);
+      border-radius: 16px; padding: 20px; cursor: pointer;
+      border: 1.5px solid transparent;
+      transition: transform var(--transition-spring), box-shadow var(--transition-spring), border-color var(--transition-spring);
+    }
+    .quiz-category-card:hover { transform: translateY(-2px); box-shadow: 0 6px 24px rgba(0,0,0,0.12); border-color: rgba(240,193,48,0.45); }
 
     /* ─── Panini Sticker Card — unchanged ─── */
     @keyframes paniniShineSweep {
@@ -446,107 +332,203 @@
 
 <script>
 const CHANTS = [
-  "Been loving you since the day I saw you (today) 🔥",
-  "My mother gave me life, and Tim gave me the will to live it.",
-  "No Payne, No Gain. This is law.",
-  "I don't know what a Wellington Phoenix is but I'd die for it.",
-  "Tim Payne is the People's World Cup.",
-  "He had 4,700 followers. Now he has an army.",
-  "El Scarso found him. The world kept him.",
-  "Group G is Tim's group now. Everyone else is visiting.",
-  "This man trained his whole life for this moment. We're the moment.",
-  "I searched every squad. Tim was waiting for me.",
-  "He's not just a defender. He defends our hearts.",
-  "4,700 to 2.5 million. That's not followers, that's a movement.",
-  "He is already the player of the tournament.",
-  "One influencer. One defender. Seven billion potential fans.",
+  "Amándote desde el día que te vi (hoy) 🔥",
+  "Mi madre me dio la vida, y Tim Payne me dio las ganas de vivirla.",
+  "No Payne, No Gain. Eso es ley.",
+  "No sé qué es Wellington Phoenix pero daría la vida por él.",
+  "Tim Payne es el World Cup del pueblo.",
+  "Tenía 4.700 seguidores. Ahora tiene un ejército.",
+  "El Scarso lo encontró. El mundo lo quedó.",
+  "El Grupo G es el grupo de Tim ahora. Los demás están de visita.",
+  "Este hombre entrenó toda su vida para este momento. Nosotros somos el momento.",
+  "Busqué en todos los planteles. Tim me estaba esperando.",
+  "No es solo un defensor. Defiende nuestros corazones.",
+  "De 4.700 a 2,5 millones. Eso no son seguidores, eso es un movimiento.",
+  "Ya es el jugador del torneo.",
+  "Un influencer. Un defensor. Siete mil millones de fans potenciales.",
 ];
 
 const CHANT_TEMPLATES = [
-  "No Payne, no gain!\n{name} believes in Tim!\nFrom {country} to Wellington,\nTim Payne is our champion! 🇳🇿⚽",
-  "Ohhh Tim Payne!\n{name} is with you!\nFrom 4,700 to millions,\nThe people's player! 🔥",
-  "Dale Tim! Dale Tim!\n{name} supports you!\nWellington to the world,\n{country} loves you! 🌍⚽",
-  "🎵 He came from New Zealand,\nWith just 4,700 fans,\nNow {name} from {country}\nIs part of Tim's clan! 🇳🇿",
+  "¡No Payne, no gain!\n¡{name} cree en Tim!\nDe {country} a Wellington,\n¡Tim Payne es nuestro campeón! 🇳🇿⚽",
+  "¡Ohhh Tim Payne!\n¡{name} está con vos!\nDe 4.700 a millones,\n¡El jugador del pueblo! 🔥",
+  "¡Dale Tim! ¡Dale Tim!\n¡{name} te apoya!\nWellington al mundo,\n¡{country} te quiere! 🌍⚽",
+  "🎵 Llegó desde New Zealand,\nCon solo 4.700 fans,\nAhora {name} de {country}\n¡Es parte del clan de Tim! 🇳🇿",
 ];
 
 const BADGES = [
-  { id: 'first_tap', name: 'First Touch', desc: 'First tap for Tim', emoji: '👆', rarity: 'common', color: '#A0AEC0', cond: s => s.totalTaps >= 1 },
-  { id: 'century', name: 'Century', desc: '100 taps today', emoji: '💯', rarity: 'common', color: '#A0AEC0', cond: s => s.sessionTaps >= 100 },
-  { id: 'thousand', name: 'Ultra', desc: '1,000 total taps', emoji: '⚡', rarity: 'rare', color: '#F0C130', cond: s => s.totalTaps >= 1000 },
-  { id: 'ten_k', name: "Tim's Army", desc: '10,000 total taps', emoji: '🪖', rarity: 'epic', color: '#9F7AEA', cond: s => s.totalTaps >= 10000 },
-  { id: 'sharer', name: 'El Scarso Jr', desc: 'Shared 5 chants', emoji: '📢', rarity: 'rare', color: '#F0C130', cond: s => s.sharesCount >= 5 },
-  { id: 'streak3', name: 'On Fire', desc: '3-day streak', emoji: '🔥', rarity: 'common', color: '#A0AEC0', cond: s => s.streak >= 3 },
-  { id: 'streak7', name: 'No Days Off', desc: '7-day streak', emoji: '💎', rarity: 'rare', color: '#F0C130', cond: s => s.streak >= 7 },
-  { id: 'polyglot', name: 'Polyglot', desc: 'Generated a chant', emoji: '🇦🇷', rarity: 'common', color: '#A0AEC0', cond: s => s.chantGenerated },
-  { id: 'day1', name: 'Day 1 Fan', desc: 'Here from the start', emoji: '🏟️', rarity: 'rare', color: '#F0C130', cond: () => true },
-  { id: 'legendary', name: 'Legendary Fan', desc: '30-day streak', emoji: '👑', rarity: 'legendary', color: '#FFD700', cond: s => s.streak >= 30 },
-  { id: 'epic_fan', name: 'True Believer', desc: '14-day streak', emoji: '🏆', rarity: 'epic', color: '#9F7AEA', cond: s => s.streak >= 14 },
-  { id: 'completionist', name: 'Completionist', desc: 'All missions done', emoji: '✅', rarity: 'epic', color: '#9F7AEA', cond: s => s.completedMissions.length >= 5 },
+  { id: 'sharer', name: 'El Scarso Jr', desc: 'Compartió 5 cantos', emoji: '📢', rarity: 'rare', color: '#F0C130', cond: s => s.sharesCount >= 5 },
+  { id: 'streak3', name: 'En Llamas', desc: 'Racha de 3 días', emoji: '🔥', rarity: 'common', color: '#A0AEC0', cond: s => s.streak >= 3 },
+  { id: 'streak7', name: 'Sin Días Libres', desc: 'Racha de 7 días', emoji: '💎', rarity: 'rare', color: '#F0C130', cond: s => s.streak >= 7 },
+  { id: 'polyglot', name: 'Políglota', desc: 'Generó un canto', emoji: '🇦🇷', rarity: 'common', color: '#A0AEC0', cond: s => s.chantGenerated },
+  { id: 'day1', name: 'Fan del Día 1', desc: 'Acá desde el principio', emoji: '🏟️', rarity: 'rare', color: '#F0C130', cond: () => true },
+  { id: 'legendary', name: 'Fan Legendario', desc: 'Racha de 30 días', emoji: '👑', rarity: 'legendary', color: '#FFD700', cond: s => s.streak >= 30 },
+  { id: 'epic_fan', name: 'Creyente Absoluto', desc: 'Racha de 14 días', emoji: '🏆', rarity: 'epic', color: '#9F7AEA', cond: s => s.streak >= 14 },
+  { id: 'completionist', name: 'Completista', desc: 'Todas las misiones hechas', emoji: '✅', rarity: 'epic', color: '#9F7AEA', cond: s => s.completedMissions.length >= 5 },
 ];
 
 const MISSIONS = [
-  { id: 'tap50', title: 'Warm Up', desc: 'Tap 50 times for Tim', emoji: '👆', pts: 10, check: s => Math.min(s.sessionTaps / 50, 1) },
-  { id: 'tap200', title: 'Full 90 Minutes', desc: 'Tap 200 times today', emoji: '⚽', pts: 30, check: s => Math.min(s.sessionTaps / 200, 1) },
-  { id: 'share1', title: 'Spread the Word', desc: 'Share a chant card', emoji: '📤', pts: 25, check: s => Math.min(s.sharesCount / 1, 1) },
-  { id: 'chant3', title: 'Choir Practice', desc: 'Browse 3 fan chants', emoji: '🎵', pts: 15, check: s => Math.min(s.chantsViewed / 3, 1) },
-  { id: 'streak3', title: 'Consistent Fan', desc: '3-day streak', emoji: '🔥', pts: 50, check: s => Math.min(s.streak / 3, 1) },
+  { id: 'share1', title: 'Corre la Voz', desc: 'Compartí un canto', emoji: '📤', pts: 25, check: s => Math.min(s.sharesCount / 1, 1) },
+  { id: 'chant3', title: 'Ensayo del Coro', desc: 'Explorá 3 cantos de fans', emoji: '🎵', pts: 15, check: s => Math.min(s.chantsViewed / 3, 1) },
+  { id: 'streak3', title: 'Fan Constante', desc: 'Racha de 3 días', emoji: '🔥', pts: 50, check: s => Math.min(s.streak / 3, 1) },
 ];
 
-const QUIZ = [
-  { q: "Where do you usually play?", answers: [
-    { text: "Right back — someone has to", pts: 20 },
-    { text: "Wherever they need me, honestly", pts: 15 },
-    { text: "I prefer not to run", pts: 5 },
-  ]},
-  { q: "Your team is losing 4-0. You:", answers: [
-    { text: "Keep defending like it's 0-0", pts: 20 },
-    { text: "Start thinking about post-match food", pts: 10 },
-    { text: "Pretend to be injured", pts: 5 },
-  ]},
-  { q: "An Argentine influencer posts about you. You:", answers: [
-    { text: "Train harder. Stay humble.", pts: 20 },
-    { text: "Check your follower count every 5 minutes", pts: 15 },
-    { text: "What's an Argentine influencer?", pts: 5 },
-  ]},
-  { q: "Your Instagram following before this week:", answers: [
-    { text: "Under 5,000. I'm a mystery.", pts: 20 },
-    { text: "Somewhere between irrelevant and forgotten", pts: 15 },
-    { text: "I have a blue tick actually", pts: 0 },
-  ]},
-  { q: "New Zealand's chances at this World Cup:", answers: [
-    { text: "We qualified. That's already the miracle.", pts: 20 },
-    { text: "Top of the group, easy", pts: 5 },
-    { text: "Wait, NZ has a football team?", pts: 10 },
-  ]},
-  { q: "Someone calls you 'El Scarso' — you:", answers: [
-    { text: "Nod respectfully. He started everything.", pts: 20 },
-    { text: "Ask who that is", pts: 10 },
-    { text: "I prefer to be called by my full name", pts: 5 },
-  ]},
+const QUESTION_BANK = [
+  {q:"¿En qué posición juega Tim Payne?",options:["A. Arquero","B. Lateral derecho","C. Delantero centro","D. Mediocampista defensivo"],correct:1},
+  {q:"¿En qué club juega Tim Payne?",options:["A. Auckland City","B. All Whites FC","C. Wellington Phoenix","D. Waitakere United"],correct:2},
+  {q:"¿Cuántos seguidores tenía Tim en Instagram antes de que El Scarso publicara sobre él?",options:["A. 4.715","B. 47.150","C. 471","D. 147.000"],correct:0},
+  {q:"¿Cuál es el nombre real de El Scarso?",options:["A. Carlos Mendez","B. Valen Scarsini","C. Diego Scarso","D. Juan El Scarso"],correct:1},
+  {q:"¿De qué nacionalidad es El Scarso?",options:["A. Chileno","B. Uruguayo","C. Brasileño","D. Argentino"],correct:3},
+  {q:"¿En cuántos mundiales ha participado New Zealand históricamente?",options:["A. Es su primera vez","B. 2 torneos","C. 5 torneos","D. 10 torneos"],correct:1},
+  {q:"¿Cuál es el número de Tim Payne en Wellington Phoenix?",options:["A. 4","B. 7","C. 6","D. 11"],correct:2},
+  {q:"¿En qué grupo está New Zealand en el World Cup 2026?",options:["A. Grupo A","B. Grupo G","C. Grupo D","D. Grupo F"],correct:1},
+  {q:"¿Con qué rapidez consiguió Tim su primer millón de seguidores?",options:["A. 1 mes","B. 1 semana","C. En menos de 48 horas","D. 10 días"],correct:2},
+  {q:"¿A qué hace referencia ‘No Payne No Gain’?",options:["A. Una frase original de Tim Payne","B. La clásica frase ‘no pain no gain’","C. Un canto de Wellington Phoenix","D. El título de un video de El Scarso"],correct:1},
+  {q:"El arma más peligrosa de Tim Payne en el campo es:",options:["A. Su pie izquierdo","B. Su pelo","C. Presentarse","D. Su presencia en Instagram"],correct:2},
+  {q:"Si Tim Payne tuviera un rating FIFA antes de este World Cup, sería:",options:["A. 99 en general","B. 55 en general","C. 75 en general","D. 88 en general"],correct:1},
+  {q:"El Scarso eligió a Tim porque era:",options:["A. El mejor jugador del torneo","B. El futbolista más seguido","C. El jugador menos conocido que pudo encontrar","D. El ídolo de su infancia"],correct:2},
+  {q:"El stat VIR (Viralidad) de Tim Payne es:",options:["A. 55","B. 72","C. 88","D. 99"],correct:3},
+  {q:"¿Cuál sería el titular de LinkedIn de Tim Payne?",options:["A. ‘Futbolista del World Cup e influencer’","B. ‘Lateral derecho. Wellington. Ocasionalmente viral.’","C. ‘CEO del fútbol de New Zealand’","D. ‘Socio comercial de El Scarso’"],correct:1},
+  {q:"El marcador de goles de Tim Payne en el World Cup es:",options:["A. 5","B. 1","C. 3","D. 0"],correct:3},
+  {q:"La descripción más precisa de Tim Payne es:",options:["A. El Messi del Hemisferio Sur","B. Un tipo que fue a trabajar y se hizo famoso sin querer","C. El goleador más prolífico de New Zealand","D. El verdadero El Scarso"],correct:1},
+  {q:"La reacción de Tim ante 2,9M de seguidores probablemente fue:",options:["A. Contrató un equipo de relaciones públicas al toque","B. Publicó 47 veces por día","C. Siguió entrenando tranquilo","D. Le mandó un desafío a Messi"],correct:2},
+  {q:"Si Tim Payne fuera un cromo de Panini, sería:",options:["A. El más intercambiado del álbum","B. El que nadie conocía hasta ahora","C. El que ya tiene todo el mundo repetido","D. Imposible de conseguir"],correct:1},
+  {q:"El stat de calidad de pelo de Tim Payne sería:",options:["A. 45 — necesita trabajo","B. 67 — decente","C. 99 — élite","D. 12 — trágico"],correct:2},
+  {q:"¿Cuántas vistas tuvo el video de El Scarso sobre Tim?",options:["A. 600.000","B. 6 millones","C. 60.000","D. 60 millones"],correct:1},
+  {q:"¿Qué le diría Tim a El Scarso si se encontraran?",options:["A. ‘Por favor, pará’","B. ‘Hagamos un negocio’","C. ‘Gracias, creo’","D. ‘¿Quién sos?’"],correct:2},
+  {q:"Tim Payne le sacó seguidores a qué famosa cuenta de New Zealand?",options:["A. The All Blacks","B. Air New Zealand","C. El Primer Ministro","D. Wellington Phoenix oficial"],correct:0},
+  {q:"La verdadera razón por la que Tim es famoso:",options:["A. Hizo un hat-trick","B. Atajó un penal en las clasificatorias","C. Un argentino en internet lo decidió","D. Fue a un programa de televisión"],correct:2},
+  {q:"El índice de aprobación de El Scarso sobre Tim Payne es:",options:["A. 67%","B. 78%","C. 91%","D. 99%"],correct:3},
+  {q:"¿Cómo describiría Tim las últimas semanas?",options:["A. ‘Lo esperaba, estaba listo para esto’","B. ‘48 horas bastante locas, todavía practicando el español’","C. ‘Finalmente el mundo ve mi genialidad’","D. ‘La culpa es toda de El Scarso’"],correct:1},
+  {q:"¿Qué idioma está practicando Tim según los rumores?",options:["A. Māori","B. Portugués","C. Español","D. Francés"],correct:2},
+  {q:"Tim Payne vs Cristiano Ronaldo: ¿quién tiene más seguidores en Instagram ahora?",options:["A. Tim, obvio","B. Ronaldo por poco","C. Ronaldo por varios cientos de millones","D. Están exactamente igual"],correct:2},
+  {q:"La historia de Tim Payne es esencialmente:",options:["A. Un futbolista comprando seguidores","B. Internet eligiendo a alguien al azar para amar","C. Un escándalo de la FIFA","D. Una campaña de marketing de Wellington Phoenix"],correct:1},
+  {q:"Si Tim Payne tuviera una canción de entrada al campo sería:",options:["A. ‘Eye of the Tiger’","B. ‘Muchachos’","C. ‘No Payne No Gain’ (el canto)","D. Algo de Coldplay, bajito"],correct:2},
+  {q:"El estilo defensivo de Tim Payne se puede describir mejor como:",options:["A. Impulsivo y caótico","B. Confiable, sólido, sin glamour","C. De clase mundial, al estilo Cafu","D. Puro vibe"],correct:1},
+  {q:"¿Cómo se llamaría la autobiografía de Tim?",options:["A. ‘En el lugar correcto, de lateral’","B. ‘Solo estaba haciendo mi trabajo’","C. ‘El efecto El Scarso’","D. Todas las anteriores"],correct:3},
+  {q:"El stat más viral de Tim Payne antes de este World Cup era:",options:["A. Goles por partido","B. Recuperaciones por 90","C. Cantidad de seguidores","D. No tenía stats virales. Ese era el punto."],correct:3},
+  {q:"Si Tim Payne gana el World Cup, El Scarso recibe:",options:["A. Nada, es solo un fan","B. Co-MVP","C. Su propio sello en New Zealand","D. La camiseta de Tim, obvio"],correct:3},
+  {q:"La lección de la historia de Tim Payne es:",options:["A. Las redes sociales lo son todo","B. Los laterales están subestimados","C. A veces internet simplemente te elige","D. Siempre jugá para New Zealand"],correct:2},
 ];
 
-const QUIZ_RESULTS = [
-  { min: 90, pct: 100, desc: "You exist quietly, you defend reliably, and somehow 2.9 million people care. Iconic." },
-  { min: 70, pct: 85, desc: "You're basically Tim's backup. Same energy, slightly less viral. The world isn't ready for you yet." },
-  { min: 50, pct: 67, desc: "You show up. You try. Occasionally someone in Buenos Aires notices." },
-  { min: 30, pct: 42, desc: "You've heard of Tim Payne. That's enough. Welcome to the army." },
-  { min: 0, pct: 0, desc: "You probably have a verified account. Disgusting." },
+const WRONG_QUIPS = [
+  "Ni el mismo Tim lo esperaba",
+  "El Scarso está decepcionado",
+  "No estuvo mal, pero casi",
+  "Tim hubiera defendido mejor",
 ];
+
+const QUIZ_TIERS = [
+  { min: 5, pct: 100, desc: "Existís en silencio, defendés con confianza, y de alguna forma 2.9 millones de personas te bancaron. Icónico." },
+  { min: 4, pct: 80, desc: "Sos básicamente el suplente de Tim. Misma energía, un poco menos viral. El mundo todavía no está listo para vos." },
+  { min: 3, pct: 60, desc: "Aparecés. Lo intentás. De vez en cuando alguien en Buenos Aires se da cuenta." },
+  { min: 2, pct: 40, desc: "Conocés a Tim Payne. Con eso alcanza. Bienvenido al ejército." },
+  { min: 0, pct: 20, desc: "Probablemente tenés cuenta verificada. Una vergüenza." },
+];
+
+const CATEGORIES = [
+  { id: 'worldcup',   emoji: '⚽', label: 'Mundial 2026',             subtitle: 'Grupos, partidos y momentos de Tim' },
+  { id: 'deepLore',   emoji: '🇳🇿', label: 'Lore de Tim Payne',       subtitle: 'El Scarso, el origen, la leyenda' },
+  { id: 'boots',      emoji: '👟', label: '¿Qué botín es?',           subtitle: 'Total 90, Predator, Tiempo y más' },
+  { id: 'goats',      emoji: '🏆', label: 'Los Mejores del Mundo',    subtitle: 'Cracks, Balón de Oro y debates' },
+  { id: 'balls',      emoji: '🔵', label: '¿Qué pelota es?',          subtitle: 'Las pelotas del Mundial en la historia' },
+  { id: 'footballiq', emoji: '🧠', label: 'Fútbol IQ',                subtitle: 'Reglas, historia y cultura futbolera' },
+];
+
+const CATEGORY_BANKS = {
+  worldcup: [
+    {q:"¿Dónde se juega el FIFA World Cup 2026?",options:["A. Solo en USA","B. USA, Canadá y México","C. Brasil y Argentina","D. Europa y USA"],correct:1},
+    {q:"¿Cuántos equipos participan en el World Cup 2026?",options:["A. 32","B. 40","C. 48","D. 36"],correct:2},
+    {q:"¿En qué grupo está New Zealand?",options:["A. Grupo A","B. Grupo D","C. Grupo F","D. Grupo G"],correct:3},
+    {q:"¿Cuál es el primer rival de New Zealand en el World Cup 2026?",options:["A. Egypt","B. Belgium","C. Iran","D. Argentina"],correct:2},
+    {q:"¿En qué estadio juega New Zealand su primer partido?",options:["A. MetLife Stadium","B. SoFi Stadium","C. AT&T Stadium","D. Levi's Stadium"],correct:1},
+    {q:"¿Cuántos partidos de World Cup ha ganado New Zealand en toda su historia?",options:["A. 0","B. 1","C. 3","D. 5"],correct:0},
+    {q:"¿En qué World Cup anterior participó Tim Payne?",options:["A. 2018 Rusia","B. 2022 Catar","C. 2014 Brasil","D. Nunca había jugado un World Cup antes"],correct:3},
+    {q:"¿De qué país es El Scarso?",options:["A. Chile","B. Uruguay","C. Argentina","D. España"],correct:2},
+    {q:"El apodo de New Zealand es:",options:["A. The Kiwis","B. The All Whites","C. The Ferns","D. The Black Caps"],correct:1},
+    {q:"¿Cuántos goles marcó New Zealand en el World Cup 2010?",options:["A. 0","B. 2","C. 3","D. 5"],correct:2},
+  ],
+  deepLore: [
+    {q:"¿En qué ciudad nació Tim Payne?",options:["A. Wellington","B. Christchurch","C. Auckland","D. Dunedin"],correct:2},
+    {q:"¿En qué año se unió Tim Payne a Wellington Phoenix?",options:["A. 2015","B. 2017","C. 2019","D. 2021"],correct:2},
+    {q:"¿A qué club inglés fichó Tim Payne al inicio de su carrera?",options:["A. Everton","B. Blackburn Rovers","C. Bolton Wanderers","D. Leeds United"],correct:1},
+    {q:"¿Qué le dijo Tim Payne a El Scarso en su DM?",options:["A. 'Por favor, pará'","B. 'Me preguntaba por qué mis redes explotaban, gracias hermano'","C. '¿Podemos dividir los seguidores?'","D. Nunca respondió"],correct:1},
+    {q:"¿Qué idioma está practicando Tim según los rumores?",options:["A. Māori","B. Portugués","C. Francés","D. Español"],correct:3},
+    {q:"¿Cuántos años tiene Tim Payne?",options:["A. 28","B. 30","C. 32","D. 35"],correct:2},
+    {q:"El número de Tim Payne en Wellington Phoenix es:",options:["A. 4","B. 6","C. 9","D. 11"],correct:1},
+    {q:"¿En qué club americano jugó Tim Payne?",options:["A. LA Galaxy 2","B. New York Red Bulls II","C. Portland Timbers 2","D. Seattle Sounders 2"],correct:2},
+    {q:"¿Aproximadamente cuántas caps internacionales tiene Tim Payne?",options:["A. Menos de 10","B. Alrededor de 25","C. Más de 50","D. Exactamente 100"],correct:2},
+    {q:"¿Por cuánto tiempo firmó Tim Payne con Wellington Phoenix en 2024?",options:["A. 1 año","B. 2 años","C. 3 años","D. 5 años"],correct:2},
+  ],
+  boots: [
+    {q:"Nombrá este botín legendario — usado por Zidane, revolucionó la técnica de disparo.",options:["A. Adidas Predator Mania","B. Nike Total 90","C. Puma King","D. Diadora Maracana"],correct:0,image:"https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/Adidas_Predator_Mania_2002.jpg/320px-Adidas_Predator_Mania_2002.jpg"},
+    {q:"Ronaldo Nazário usó estos en Francia 98. El botín más liviano de su época.",options:["A. Adidas Predator","B. Nike Mercurial","C. Puma v1.06","D. Lotto Zhero"],correct:1,image:"https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/Nike_Mercurial_1998.jpg/320px-Nike_Mercurial_1998.jpg"},
+    {q:"Este botín se convirtió en el símbolo del fútbol callejero a principios de los 2000. ¿Cuál es?",options:["A. Adidas F50","B. Nike Shox R4","C. Nike Total 90 Laser","D. Adidas Predator Pulse"],correct:2,image:"https://upload.wikimedia.org/wikipedia/commons/thumb/f/f7/Nike_Total_90_Laser.jpg/320px-Nike_Total_90_Laser.jpg"},
+    {q:"¿Qué marca de botines usó Lionel Messi durante la mayoría de su carrera en Barcelona?",options:["A. Nike","B. Puma","C. Adidas","D. New Balance"],correct:2},
+    {q:"Pelé los usó durante toda su carrera. Un botín que definió una época.",options:["A. Adidas Copa Mundial","B. Puma King","C. Hummel Stadion","D. Adidas World Cup"],correct:1,image:"https://upload.wikimedia.org/wikipedia/commons/thumb/b/b4/Puma_King_boots.jpg/320px-Puma_King_boots.jpg"},
+    {q:"¿Qué botín es este? Debutó en el World Cup 2010 y generó controversia por su movimiento.",options:["A. Nike Mercurial Vapor","B. Adidas Predator X","C. Puma PowerCat","D. Adidas adiPure"],correct:1,image:"https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Adidas_Predator_X.jpg/320px-Adidas_Predator_X.jpg"},
+    {q:"La línea de botines de Cristiano Ronaldo se llama:",options:["A. Nike Mercurial","B. Nike Phantom","C. Nike Tiempo","D. Nike Hypervenom"],correct:0},
+    {q:"¿Qué botines usó Thierry Henry durante la temporada Invencibles del Arsenal 2003-04?",options:["A. Adidas Predator","B. Nike Air Zoom Total 90","C. Puma v1.06","D. Umbro Speciali"],correct:1},
+    {q:"Las adidas Copa Mundial están en producción desde:",options:["A. 1968","B. 1979","C. 1982","D. 1990"],correct:2},
+    {q:"¿Qué botín está asociado al slogan El botín más rápido del mundo?",options:["A. Adidas F50 adiZero","B. Nike Mercurial Vapor","C. Puma evoSpeed","D. Under Armour Clutchfit"],correct:0},
+  ],
+  goats: [
+    {q:"¿Quién ha ganado más Balones de Oro?",options:["A. Cristiano Ronaldo","B. Lionel Messi","C. Ronaldo Nazário","D. Zinedine Zidane"],correct:1},
+    {q:"¿Qué país ha ganado más mundiales?",options:["A. Alemania","B. Italia","C. Brasil","D. Argentina"],correct:2},
+    {q:"¿Quién marcó más goles en un solo torneo de World Cup?",options:["A. Ronaldo","B. Miroslav Klose","C. Just Fontaine","D. Gerd Müller"],correct:2},
+    {q:"¿Qué arquero es considerado por muchos el mejor de todos los tiempos?",options:["A. Peter Schmeichel","B. Gianluigi Buffon","C. Manuel Neuer","D. Lev Yashin"],correct:3},
+    {q:"¿En qué club juega Cristiano Ronaldo en 2026?",options:["A. Manchester United","B. Real Madrid","C. Al Nassr","D. Juventus"],correct:2},
+    {q:"¿Qué nación ganó el FIFA World Cup 2022?",options:["A. Francia","B. Brasil","C. Argentina","D. Croacia"],correct:2},
+    {q:"¿Quién es el máximo goleador histórico del World Cup?",options:["A. Ronaldo Nazário","B. Gerd Müller","C. Miroslav Klose","D. Lionel Messi"],correct:2},
+    {q:"¿A qué jugador apodan 'El Rey Egipcio'?",options:["A. Ahmed Hassan","B. Mohamed Salah","C. Hossam Hassan","D. Amr Zaki"],correct:1},
+    {q:"¿En qué club juega Kylian Mbappé en 2026?",options:["A. PSG","B. Real Madrid","C. Bayern Munich","D. Arsenal"],correct:1},
+    {q:"¿Qué equipo ganó el primer FIFA World Cup en 1930?",options:["A. Brasil","B. Argentina","C. Uruguay","D. Italia"],correct:2},
+  ],
+  balls: [
+    {q:"El Jabulani fue la pelota oficial de qué World Cup?",options:["A. 2006 Alemania","B. 2010 Sudáfrica","C. 2014 Brasil","D. 2018 Rusia"],correct:1},
+    {q:"¿En qué World Cup se usó la pelota Brazuca?",options:["A. 2010","B. 2014","C. 2018","D. 2022"],correct:1},
+    {q:"El Telstar fue la primera pelota del World Cup con pentágonos negros. ¿En qué año?",options:["A. 1966","B. 1970","C. 1974","D. 1978"],correct:1},
+    {q:"La pelota del World Cup Qatar 2022 se llamaba:",options:["A. Brazuca","B. Jabulani","C. Al Rihla","D. Teamgeist"],correct:2},
+    {q:"¿Qué pelota fue criticada por los arqueros por su movimiento impredecible?",options:["A. Brazuca","B. Teamgeist","C. Jabulani","D. Al Rihla"],correct:2},
+    {q:"El Fevernova se usó en qué World Cup?",options:["A. 1998 Francia","B. 2002 Corea/Japón","C. 2006 Alemania","D. 2010 Sudáfrica"],correct:1},
+    {q:"¿Qué pelota se usó en el World Cup Francia 1998?",options:["A. Tricolore","B. Questra","C. Fevernova","D. Telstar"],correct:0},
+    {q:"Adidas provee la pelota oficial del World Cup desde:",options:["A. 1954","B. 1970","C. 1978","D. 1982"],correct:1},
+    {q:"La pelota del World Cup Rusia 2018 se llamaba:",options:["A. Brazuca","B. Al Rihla","C. Telstar 18","D. Jabulani"],correct:2},
+    {q:"¿Qué empresa fabrica todas las pelotas oficiales del FIFA World Cup?",options:["A. Nike","B. Puma","C. Adidas","D. Under Armour"],correct:2},
+  ],
+  footballiq: [
+    {q:"¿Cuánto dura un partido de fútbol estándar?",options:["A. 80 minutos","B. 90 minutos","C. 100 minutos","D. 120 minutos"],correct:1},
+    {q:"¿Cuántos jugadores hay en el campo por equipo?",options:["A. 10","B. 11","C. 12","D. 9"],correct:1},
+    {q:"¿Qué es un hat-trick?",options:["A. Dos goles en un partido","B. Tres goles en un partido","C. Cuatro goles en un partido","D. Un penal atajado"],correct:1},
+    {q:"El offside aplica cuando:",options:["A. Un jugador está detrás de la mitad de cancha","B. Un jugador está más cerca del arco que la pelota y el segundo último defensor cuando se pasa la pelota","C. Un jugador toca la pelota con la mano","D. Un jugador está fuera del área"],correct:1},
+    {q:"¿Qué color de tarjeta hace que un jugador sea expulsado?",options:["A. Amarilla","B. Naranja","C. Roja","D. Negra"],correct:2},
+    {q:"¿Cuántos cambios puede hacer un equipo en un partido estándar?",options:["A. 3","B. 4","C. 5","D. 6"],correct:2},
+    {q:"¿Qué es un clásico?",options:["A. Un partido entre los dos primeros de la liga","B. Un partido entre clubes rivales locales","C. Una final de copa","D. Un partido amistoso"],correct:1},
+    {q:"¿Qué país inventó el fútbol?",options:["A. Brasil","B. España","C. Inglaterra","D. Alemania"],correct:2},
+    {q:"¿Qué significa VAR?",options:["A. Video Assistant Referee","B. Virtual Automated Review","C. Video Analysis Recording","D. Verified Action Referee"],correct:0},
+    {q:"¿Desde dónde se ejecuta un penal?",options:["A. A 10 yardas","B. A 12 yardas","C. A 15 yardas","D. A 18 yardas"],correct:1},
+  ],
+};
 
 const TIM_FACTS = [
-  { e: '🏆', l: 'Tournament', v: 'World Cup 2026' },
+  { e: '🏆', l: 'Torneo', v: 'World Cup 2026' },
   { e: '🏟️', l: 'Club', v: 'Wellington Phoenix' },
-  { e: '🌏', l: 'Group', v: 'G' },
-  { e: '⚡', l: 'Position', v: 'Right Back' },
-  { e: '🇳🇿', l: 'Nation', v: 'New Zealand' },
-  { e: '🚀', l: 'Peak', v: '2.5M+ fans' },
+  { e: '🌏', l: 'Grupo', v: 'G' },
+  { e: '⚡', l: 'Posición', v: 'Lateral derecho' },
+  { e: '🇳🇿', l: 'Nación', v: 'New Zealand' },
+  { e: '🚀', l: 'Pico', v: '2,5M+ fans' },
 ];
+
+const NZ_MATCHES = [
+  { id: 'match1', opponent: 'Iran',    flag: '🇮🇷', date: '2026-06-16T19:00:00', venue: 'SoFi Stadium, Los Angeles', result: null },
+  { id: 'match2', opponent: 'Egypt',   flag: '🇪🇬', date: '2026-06-21T16:00:00', venue: 'BC Place, Vancouver',       result: null },
+  { id: 'match3', opponent: 'Belgium', flag: '🇧🇪', date: '2026-06-26T16:00:00', venue: 'BC Place, Vancouver',       result: null },
+];
+
+let countdownInterval = null;
 
 // State
 let state = {
-  tab: 'hype',
-  totalTaps: 0,
-  sessionTaps: 0,
+  tab: 'quiz',
   points: 0,
   streak: 1,
   sharesCount: 0,
@@ -558,16 +540,17 @@ let state = {
   fanChantIdx: 0,
   pendingBadge: null,
   generatedChant: '',
-  cardStats: null,
+  activeQuiz: null,
+  quizBank: [],
   quizStep: 0,
   quizScore: 0,
+  quizCombo: 0,
+  predictions: {
+    match1: { result: null, timStarts: null, timScores: null, motm: null, locked: false, scored: false },
+    match2: { result: null, timStarts: null, timScores: null, motm: null, locked: false, scored: false },
+    match3: { result: null, timStarts: null, timScores: null, motm: null, locked: false, scored: false },
+  },
 };
-
-function fmt(n) {
-  if (n >= 1000000) return (n / 1000000).toFixed(1) + 'M';
-  if (n >= 1000) return (n / 1000).toFixed(1) + 'K';
-  return n.toString();
-}
 
 function checkBadges() {
   for (const badge of BADGES) {
@@ -589,19 +572,176 @@ function checkMissions() {
   }
 }
 
-function spawnParticle(e) {
-  const emojis = ['🔥','⚽','🇳🇿','💥','⭐','🏆'];
-  const p = document.createElement('div');
-  p.className = 'particle';
-  p.textContent = emojis[Math.floor(Math.random() * emojis.length)];
-  p.style.left = (e.clientX || window.innerWidth / 2) + 'px';
-  p.style.top = (e.clientY || window.innerHeight / 2) + 'px';
-  document.body.appendChild(p);
-  setTimeout(() => p.remove(), 900);
+function formatCountdown(dateStr) {
+  const diff = new Date(dateStr) - new Date();
+  if (diff <= 0) return '¡Ya empezó!';
+  const d = Math.floor(diff / 86400000);
+  const h = Math.floor((diff % 86400000) / 3600000);
+  const m = Math.floor((diff % 3600000) / 60000);
+  return `Empieza en ${d}d ${h}h ${m}m`;
+}
+
+function updateCountdowns() {
+  NZ_MATCHES.forEach(m => {
+    const el = document.getElementById(`countdown-${m.id}`);
+    if (el) el.textContent = formatCountdown(m.date);
+  });
+}
+
+function awardPredictionPoints() {
+  NZ_MATCHES.forEach(match => {
+    if (!match.result) return;
+    const pred = state.predictions[match.id];
+    if (!pred || pred.scored) return;
+    const r = match.result;
+    const correct = [
+      pred.result    === r.outcome,
+      pred.timStarts === r.timStarted,
+      pred.timScores === r.timScored,
+      pred.motm      === r.motm,
+    ].filter(Boolean).length;
+    state.points += correct * 50;
+    state.predictions[match.id].scored = true;
+  });
+}
+
+function renderMatchTracker() {
+  const pillBase = 'border:1.5px solid transparent;border-radius:100px;padding:7px 14px;font-family:\'DM Sans\',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:background 0.15s,border-color 0.15s;white-space:nowrap;';
+  const pillOff  = pillBase + 'background:#F0EEE8;color:#0A0A0A;';
+  const pillOn   = pillBase + 'background:#F0C130;border-color:#F0C130;color:#0A0A0A;font-weight:700;';
+
+  function predPill(matchId, field, value, label, current) {
+    const sel = current === value;
+    return `<button class="pred-pill" data-match="${matchId}" data-field="${field}" data-value="${value}" style="${sel ? pillOn : pillOff}">${label}</button>`;
+  }
+
+  function predRow(label, matchId, field, opts, current, locked, correct) {
+    const revealed = correct !== undefined;
+    const isCorrect = revealed && correct;
+    const isWrong   = revealed && !correct;
+    const rowBg = revealed ? (isCorrect ? '#4CAF50' : '#FF4B4B') : 'transparent';
+    const rowColor = revealed ? '#FFFFFF' : '#0A0A0A';
+    const icon = revealed ? (isCorrect ? '✓' : '✗') : '';
+    if (locked || revealed) {
+      const chosen = opts.find(o => o.value === current);
+      return `
+        <div style="display:flex;align-items:center;justify-content:space-between;background:${rowBg};border-radius:10px;padding:8px 10px;">
+          <div style="font-size:12px;font-weight:600;color:${revealed ? '#FFFFFF' : '#888888'};flex:1;">${label}</div>
+          <div style="font-size:13px;color:${revealed ? '#FFFFFF' : '#BBBBBB'};margin-right:8px;">${chosen ? chosen.label : '—'}</div>
+          ${revealed ? `<div style="font-size:14px;font-weight:700;color:#FFFFFF;">${icon}</div>` : ''}
+        </div>`;
+    }
+    return `
+      <div>
+        <div style="font-size:12px;font-weight:600;color:#888888;margin-bottom:6px;">${label}</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">${opts.map(o => predPill(matchId, field, o.value, o.label, current)).join('')}</div>
+      </div>`;
+  }
+
+  // Total correct predictions across revealed matches
+  let totalCorrect = 0;
+  NZ_MATCHES.forEach(match => {
+    if (!match.result) return;
+    const pred = state.predictions[match.id];
+    if (!pred) return;
+    const r = match.result;
+    totalCorrect += [pred.result===r.outcome, pred.timStarts===r.timStarted, pred.timScores===r.timScored, pred.motm===r.motm].filter(Boolean).length;
+  });
+
+  const matchCards = NZ_MATCHES.map(match => {
+    const pred = state.predictions[match.id];
+    const now = new Date();
+    const kickoff = new Date(match.date);
+    const isPast = now >= kickoff;
+    const locked = pred.locked || isPast;
+    const dateStr = kickoff.toLocaleDateString('en-GB', { weekday:'short', day:'numeric', month:'short', hour:'2-digit', minute:'2-digit' });
+
+    const resultOpts   = [{value:'win',label:'Victoria NZ'},{value:'draw',label:'Empate'},{value:'loss',label:'Derrota NZ'}];
+    const startsOpts   = [{value:true,label:'Sí, es titular'},{value:false,label:'Calienta el banco'}];
+    const scoresOpts   = [{value:true,label:'Tim anota 🎉'},{value:false,label:'0 goles (clásico Tim)'}];
+    const motmOpts     = [{value:true,label:'Tim Payne 🇳🇿'},{value:false,label:'Alguien más'}];
+
+    const allAnswered = pred.result !== null && pred.timStarts !== null && pred.timScores !== null && pred.motm !== null;
+
+    // RESULT REVEALED
+    if (match.result) {
+      const r = match.result;
+      const corrects = { result: pred.result===r.outcome, timStarts: pred.timStarts===r.timStarted, timScores: pred.timScores===r.timScored, motm: pred.motm===r.motm };
+      const correctCount = Object.values(corrects).filter(Boolean).length;
+      return `
+        <div class="card" style="gap:14px;">
+          <div style="font-size:20px;font-weight:800;color:#0A0A0A;">NZ 🇳🇿 vs ${match.flag} ${match.opponent}</div>
+          <div style="font-size:22px;font-weight:800;color:#0A0A0A;text-align:center;padding:8px 0;">${r.score}</div>
+          ${predRow('Resultado del partido', match.id, 'result',    resultOpts, pred.result,    true, corrects.result)}
+          ${predRow('¿Tim sale de titular?', match.id, 'timStarts', startsOpts, pred.timStarts, true, corrects.timStarts)}
+          ${predRow('¿Tim anota?',           match.id, 'timScores', scoresOpts, pred.timScores, true, corrects.timScores)}
+          ${predRow('¿Tim MVP del partido?', match.id, 'motm',      motmOpts,   pred.motm,      true, corrects.motm)}
+          <div style="background:rgba(240,193,48,0.12);border-radius:12px;padding:12px 16px;text-align:center;">
+            <div style="font-size:15px;font-weight:700;color:#C8960C;">¡Acertaste ${correctCount}/4 — +${correctCount*50} Payne Points! 🎉</div>
+          </div>
+        </div>`;
+    }
+
+    // LOCKED or PAST (result pending)
+    if (locked) {
+      return `
+        <div class="card" style="gap:14px;">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+            <div style="font-size:20px;font-weight:800;color:#0A0A0A;">NZ 🇳🇿 vs ${match.flag} ${match.opponent}</div>
+            ${isPast ? '<div style="font-size:12px;font-weight:600;color:#888888;background:#F0EEE8;padding:4px 10px;border-radius:100px;">Resultado pendiente...</div>' : '<div style="font-size:12px;font-weight:700;color:#4CAF50;">Predicciones confirmadas ✓</div>'}
+          </div>
+          <div style="font-size:13px;color:#888888;">${dateStr} · ${match.venue}</div>
+          <div style="display:flex;flex-direction:column;gap:6px;">
+            ${predRow('Resultado del partido',  match.id, 'result',    resultOpts, pred.result,    true)}
+            ${predRow('¿Tim sale de titular?',  match.id, 'timStarts', startsOpts, pred.timStarts, true)}
+            ${predRow('¿Tim anota?',            match.id, 'timScores', scoresOpts, pred.timScores, true)}
+            ${predRow('¿Tim MVP del partido?',  match.id, 'motm',      motmOpts,   pred.motm,      true)}
+          </div>
+          ${isPast ? '<div style="font-size:13px;color:#BBBBBB;text-align:center;">Los resultados aparecerán aquí después del partido</div>' : ''}
+        </div>`;
+    }
+
+    // UPCOMING + UNLOCKED
+    return `
+      <div class="card" style="gap:14px;">
+        <div style="font-size:20px;font-weight:800;color:#0A0A0A;">NZ 🇳🇿 vs ${match.flag} ${match.opponent}</div>
+        <div style="font-size:13px;color:#888888;">${dateStr} · ${match.venue}</div>
+        <div style="font-size:15px;font-weight:700;color:#C8960C;" id="countdown-${match.id}">${formatCountdown(match.date)}</div>
+        <div style="height:1px;background:#F0EEE8;"></div>
+        <div style="font-size:13px;font-weight:700;color:#0A0A0A;">Haz tus predicciones:</div>
+        <div style="display:flex;flex-direction:column;gap:14px;">
+          ${predRow('Resultado del partido',  match.id, 'result',    resultOpts, pred.result,    false)}
+          ${predRow('¿Tim sale de titular?',  match.id, 'timStarts', startsOpts, pred.timStarts, false)}
+          ${predRow('¿Tim anota?',            match.id, 'timScores', scoresOpts, pred.timScores, false)}
+          ${predRow('¿Tim MVP del partido?',  match.id, 'motm',      motmOpts,   pred.motm,      false)}
+        </div>
+        <button id="lock-pred-${match.id}" ${allAnswered ? '' : 'disabled'} style="background:${allAnswered ? '#F0C130' : '#F0EEE8'};border:none;border-radius:14px;padding:14px;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:700;color:${allAnswered ? '#0A0A0A' : '#BBBBBB'};cursor:${allAnswered ? 'pointer' : 'default'};width:100%;">
+          ${allAnswered ? 'Confirmar predicciones 🔒' : 'Respondé las 4 para confirmar'}
+        </button>
+      </div>`;
+  }).join('');
+
+  return `
+    <div class="section-title" style="font-size:22px;">Predicciones del Partido</div>
+    <div class="subtitle" style="margin-top:-8px;">Predicí los 3 partidos del Grupo G · 50pts por acierto</div>
+    ${matchCards}
+    <div class="card" style="gap:12px;align-items:center;text-align:center;">
+      <div style="font-size:18px;font-weight:800;color:#0A0A0A;">Mejores Predictores 🏆</div>
+      <div style="font-size:28px;font-weight:800;color:#C8960C;">${totalCorrect}<span style="font-size:16px;color:#888888;font-weight:500;"> / 12</span></div>
+      <div style="font-size:14px;color:#888888;">Tu puntaje de predicciones hasta ahora</div>
+      <div style="height:1px;background:#F0EEE8;width:100%;"></div>
+      <div style="font-size:13px;color:#888888;">Ranking completo próximamente — ¡compartí tu puntaje!</div>
+      <button id="pred-share-btn" class="btn-primary">Compartir mi puntaje</button>
+    </div>
+  `;
+}
+
+function escapeHtml(str) {
+  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
 }
 
 function shareText(text) {
-  const full = text + '\n\n🇳🇿 No Payne, No Gain\nnopaynegain.vercel.app';
+  const full = text + '\n\n🇳🇿 No Payne, No Gain\ntimpaynefans.vercel.app';
   if (navigator.share) {
     navigator.share({ text: full }).catch(() => {});
   } else {
@@ -613,137 +753,156 @@ function shareText(text) {
   render();
 }
 
-function getQuizResult(score) {
-  return QUIZ_RESULTS.find(r => score >= r.min) || QUIZ_RESULTS[QUIZ_RESULTS.length - 1];
+function pickQuizQuestions() {
+  const bank = (state.activeQuiz === 'timpayne' || state.activeQuiz === null)
+    ? QUESTION_BANK
+    : CATEGORY_BANKS[state.activeQuiz];
+  const shuffled = [...bank].sort(() => Math.random() - 0.5);
+  state.quizBank = shuffled.slice(0, 5);
 }
 
-function renderQuiz() {
-  if (state.quizStep === 0) {
+function spawnConfetti(anchorEl) {
+  const rect = anchorEl.getBoundingClientRect();
+  const cx = rect.left + rect.width / 2;
+  const cy = rect.top + rect.height / 2;
+  const colors = ['#F0C130','#4ade80','#60a5fa','#f472b6','#fb923c','#a78bfa'];
+  for (let i = 0; i < 14; i++) {
+    const dot = document.createElement('div');
+    dot.className = 'confetti-dot';
+    const angle = (i / 14) * Math.PI * 2;
+    const dist = 36 + Math.random() * 40;
+    dot.style.cssText = `left:${cx}px;top:${cy}px;background:${colors[i % colors.length]};--dx:${Math.cos(angle)*dist}px;--dy:${Math.sin(angle)*dist}px;`;
+    document.body.appendChild(dot);
+    setTimeout(() => dot.remove(), 700);
+  }
+}
+
+function spawnPlusOne(anchorEl) {
+  const rect = anchorEl.getBoundingClientRect();
+  const el = document.createElement('div');
+  el.className = 'plus-one';
+  el.textContent = '+1';
+  el.style.left = (rect.left + rect.width / 2) + 'px';
+  el.style.top = (rect.top - 4) + 'px';
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), 900);
+}
+
+function spawnWrongX() {
+  const el = document.createElement('div');
+  el.className = 'wrong-x';
+  el.textContent = '✕';
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), 1050);
+}
+
+function startCountUp(targetPct) {
+  const el = document.getElementById('quiz-pct');
+  if (!el) return;
+  let current = 0;
+  const steps = 30;
+  const inc = targetPct / steps;
+  const iv = setInterval(() => {
+    current = Math.min(current + inc, targetPct);
+    el.textContent = Math.round(current) + '%';
+    if (current >= targetPct) clearInterval(iv);
+  }, 22);
+}
+
+function spawnResultConfetti() {
+  const colors = ['#F0C130','#4ade80','#60a5fa','#f472b6','#fb923c'];
+  for (let i = 0; i < 20; i++) {
+    setTimeout(() => {
+      const dot = document.createElement('div');
+      dot.className = 'confetti-dot';
+      const cx = Math.random() * window.innerWidth;
+      const cy = 80 + Math.random() * 120;
+      const angle = Math.PI / 2 + (Math.random() - 0.5) * 1.5;
+      const dist = 50 + Math.random() * 60;
+      dot.style.cssText = `left:${cx}px;top:${cy}px;background:${colors[i % colors.length]};--dx:${Math.cos(angle)*dist}px;--dy:${Math.sin(angle)*dist}px;`;
+      document.body.appendChild(dot);
+      setTimeout(() => dot.remove(), 700);
+    }, i * 35);
+  }
+}
+
+function renderQuizTab() {
+  // Hub view
+  if (state.activeQuiz === null) {
     return `
-      <div class="card quiz-card" style="align-items:center;text-align:center;gap:10px;">
-        <div class="pill">🧠 QUIZ</div>
-        <div class="section-title">What % Tim Payne Are You?</div>
-        <div class="subtitle" style="margin-top:0;">6 questions. No wrong answers.<br>Well — one wrong answer.</div>
-        <button class="btn-primary" id="start-quiz-btn" style="margin-top:4px;">Take the Quiz →</button>
+      <div class="card quiz-card" style="align-items:center;text-align:center;gap:12px;padding:32px 20px;">
+        <div class="pill">DESTACADO</div>
+        <div class="section-title">¿Sos del Ejército de Tim Payne?</div>
+        <div class="subtitle" style="margin-top:0;">5 preguntas · 35 en el banco · nuevas cada partida</div>
+        <button class="btn-primary" id="start-quiz-btn" style="margin-top:8px;">Empezar Quiz →</button>
+      </div>
+      <div class="section-title" style="margin-top:4px;">Más Quizzes</div>
+      <div class="quiz-category-grid">
+        ${CATEGORIES.map(cat => `
+          <div class="quiz-category-card" id="cat-${cat.id}">
+            <div style="font-size:32px;margin-bottom:8px;">${cat.emoji}</div>
+            <div style="font-size:15px;font-weight:700;color:#0A0A0A;margin-bottom:4px;line-height:1.3;">${cat.label}</div>
+            <div style="font-size:12px;color:#888888;line-height:1.4;margin-bottom:12px;">${cat.subtitle}</div>
+            <div style="font-size:13px;font-weight:600;color:#C8960C;">Jugar →</div>
+          </div>
+        `).join('')}
       </div>
     `;
   }
 
-  if (state.quizStep === 7) {
-    const r = getQuizResult(state.quizScore);
+  // Result view
+  if (state.quizStep === 6) {
+    const isTimPayne = state.activeQuiz === 'timpayne';
+    const cat = isTimPayne ? { emoji: '🇳🇿', label: '¿Sos del Ejército de Tim Payne?' } : CATEGORIES.find(c => c.id === state.activeQuiz);
+    const tier = QUIZ_TIERS.find(t => state.quizScore >= t.min) || QUIZ_TIERS[QUIZ_TIERS.length - 1];
     return `
       <div class="card quiz-card" style="align-items:center;text-align:center;gap:10px;padding:28px 20px;">
-        <div style="font-size:11px;font-weight:600;color:var(--text-muted);letter-spacing:3px;">TIM PAYNE</div>
-        <div style="font-family:'Playfair Display',serif;font-style:italic;font-size:80px;font-weight:700;color:var(--accent);line-height:1;letter-spacing:-3px;">${r.pct}%</div>
-        <div style="font-size:28px;">🇳🇿</div>
-        <div style="font-size:14px;color:var(--text-secondary);line-height:1.65;max-width:280px;">${r.desc}</div>
+        <div style="font-size:11px;font-weight:600;color:var(--text-muted);letter-spacing:3px;">RESULTADO</div>
+        <div id="quiz-pct" style="font-family:'DM Sans',sans-serif;font-size:96px;font-weight:800;color:#0A0A0A;line-height:1;letter-spacing:-4px;">0%</div>
+        <div style="font-size:15px;font-weight:600;color:var(--text-muted);">${state.quizScore} / 5 correctas</div>
+        <div style="font-size:28px;">${cat.emoji}</div>
+        ${isTimPayne ? `<div style="font-size:14px;color:var(--text-secondary);line-height:1.65;max-width:280px;">${tier.desc}</div>` : `<div style="font-size:14px;font-weight:600;color:#0A0A0A;">${cat.label}</div>`}
         <div style="display:flex;flex-direction:column;gap:8px;width:100%;margin-top:6px;">
-          <button class="btn-primary" id="share-quiz-btn">📤 Share Result</button>
-          <button class="btn-outline" id="retake-quiz-btn">↩ Retake Quiz</button>
+          <button class="btn-primary" id="share-quiz-btn">Compartir resultado</button>
+          <button class="btn-outline" id="play-again-btn">Jugar de nuevo →</button>
+          <button class="btn-outline" id="back-to-hub-btn">← Volver a los Quizzes</button>
         </div>
       </div>
     `;
   }
 
-  const q = QUIZ[state.quizStep - 1];
-  const dots = Array.from({length: 6}, (_, i) => {
-    const done = i < state.quizStep - 1;
-    const curr = i === state.quizStep - 1;
-    return `<div style="width:8px;height:8px;border-radius:50%;background:${curr ? 'var(--accent)' : done ? 'rgba(240,193,48,0.38)' : 'rgba(255,255,255,0.14)'};transition:background 0.3s;"></div>`;
-  }).join('');
-
+  // Question view
+  const q = state.quizBank[state.quizStep - 1];
+  const progressPct = ((state.quizStep - 1) / 5) * 100;
+  const activeCat = state.activeQuiz === 'timpayne'
+    ? { emoji: '🇳🇿', label: '¿Sos del Ejército de Tim Payne?' }
+    : CATEGORIES.find(c => c.id === state.activeQuiz);
   return `
-    <div style="display:flex;justify-content:center;gap:8px;margin-bottom:2px;">${dots}</div>
+    <div style="height:4px;background:#F0EEE8;border-radius:99px;overflow:hidden;margin-bottom:6px;">
+      <div style="height:100%;width:${progressPct}%;background:var(--accent);border-radius:99px;transition:width 0.35s ease;"></div>
+    </div>
     <div class="card quiz-card" style="gap:12px;">
-      <div style="font-size:10px;font-weight:600;color:var(--text-muted);letter-spacing:2px;">QUESTION ${state.quizStep} OF 6</div>
-      <div style="font-family:'Playfair Display',serif;font-style:italic;font-size:19px;line-height:1.35;color:#fff;">"${q.q}"</div>
-      ${q.answers.map(a => `
-        <button class="quiz-answer" data-pts="${a.pts}" style="backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:14px;padding:14px 16px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;color:#fff;text-align:left;cursor:pointer;width:100%;box-shadow:inset 0 1px 0 rgba(255,255,255,0.08);transition:border-color 0.2s,background 0.2s,color 0.2s;">${a.text}</button>
-      `).join('')}
-    </div>
-  `;
-}
-
-function generateCard() {
-  const rand = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
-  const hair = ['Elite', 'Legendary', 'Iconic', 'Peak'];
-  const followers = (Math.random() * 0.8 + 2.1).toFixed(1) + 'M';
-  state.cardStats = {
-    rating: rand(52, 61),
-    pac: rand(58, 72), sht: rand(12, 28),
-    pas: rand(55, 68), dri: rand(44, 62),
-    def: rand(61, 74), vir: 99,
-    followers,
-    hair: hair[Math.floor(Math.random() * hair.length)],
-  };
-}
-
-function renderTimCard() {
-  if (!state.cardStats) generateCard();
-  const c = state.cardStats;
-  const stat = (label, val) => `
-    <div style="display:flex;justify-content:space-between;align-items:baseline;">
-      <span style="font-size:11px;font-weight:600;color:rgba(0,0,0,0.45);letter-spacing:1px;">${label}</span>
-      <span style="font-size:15px;font-weight:900;color:${label === 'VIR' ? '#7a3e00' : '#1a0f00'};">${val}</span>
-    </div>`;
-  return `
-    <div class="section-title" style="font-size:28px">Tim's Card 🃏</div>
-    <div class="subtitle">Stats randomise every generation · screenshot &amp; share</div>
-    <div class="tim-card-wrap">
-      <div class="tim-card" style="width:280px;background:linear-gradient(160deg,#9B6F0A 0%,#C8960C 15%,#FFD700 40%,#E8B400 60%,#C8960C 85%,#9B6F0A 100%);border-radius:18px;border:1px solid rgba(255,255,255,0.35);box-shadow:0 0 0 1px #7A5200,0 24px 64px rgba(0,0,0,0.85),inset 0 1px 0 rgba(255,255,255,0.45);padding:18px 16px 14px;position:relative;overflow:hidden;font-family:'Oswald','DM Sans',sans-serif;">
-        <div style="position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,0.18) 0%,transparent 55%);border-radius:inherit;pointer-events:none;"></div>
-        <div style="display:flex;justify-content:space-between;align-items:flex-start;position:relative;">
-          <div style="display:flex;flex-direction:column;align-items:flex-start;line-height:1;">
-            <span style="font-size:56px;font-weight:900;color:#1a0f00;letter-spacing:-2px;">${c.rating}</span>
-            <span style="font-size:14px;font-weight:700;color:#3a2000;letter-spacing:2px;margin-top:-6px;">RB</span>
-            <span style="font-size:22px;margin-top:4px;">🇳🇿</span>
-          </div>
-          <div style="font-size:10px;font-weight:600;color:rgba(0,0,0,0.38);letter-spacing:1.5px;text-align:right;padding-top:4px;line-height:1.7;">FIFA WC<br>2026</div>
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <div>
+          <div style="font-size:11px;color:#888888;margin-bottom:2px;">${activeCat.emoji} ${activeCat.label}</div>
+          <div style="font-size:10px;font-weight:600;color:var(--text-muted);letter-spacing:2px;">PREGUNTA ${state.quizStep} DE 5</div>
         </div>
-        <div style="text-align:center;margin:2px 0;">
-          <svg width="130" height="128" viewBox="0 0 130 130" xmlns="http://www.w3.org/2000/svg">
-            <g fill="rgba(0,0,0,0.22)">
-              <ellipse cx="65" cy="16" rx="11" ry="12"/>
-              <rect x="61" y="26" width="8" height="7" rx="2"/>
-              <path d="M45 33 Q65 30 85 33 L82 68 Q65 72 48 68 Z"/>
-              <path d="M48 36 L32 62 L37 65 L52 42 Z"/>
-              <path d="M82 36 L100 55 L96 59 L78 42 Z"/>
-              <path d="M52 68 L38 100 L44 102 L58 72 Z"/>
-              <ellipse cx="40" cy="102" rx="8" ry="4" transform="rotate(-15 40 102)"/>
-              <path d="M76 68 L88 100 L82 102 L70 72 Z"/>
-              <ellipse cx="86" cy="102" rx="8" ry="4" transform="rotate(10 86 102)"/>
-              <circle cx="36" cy="112" r="9"/>
-            </g>
-          </svg>
-        </div>
-        <div style="text-align:center;font-size:19px;font-weight:900;color:#1a0f00;letter-spacing:4px;margin-bottom:10px;">TIM PAYNE</div>
-        <div style="height:1px;background:rgba(0,0,0,0.18);margin-bottom:10px;"></div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:5px 20px;margin-bottom:12px;padding:0 4px;">
-          ${stat('PAC', c.pac)}${stat('SHT', c.sht)}
-          ${stat('PAS', c.pas)}${stat('DRI', c.dri)}
-          ${stat('DEF', c.def)}${stat('VIR', c.vir)}
-        </div>
-        <div style="background:rgba(0,0,0,0.14);border-radius:10px;padding:8px 10px;display:flex;flex-direction:column;gap:5px;">
-          ${[
-            ['📱 Followers', c.followers],
-            ['⚽ World Cup Goals', '0'],
-            ['🇦🇷 El Scarso Approval', '99%'],
-            ['💇 Hair', c.hair],
-          ].map(([k,v]) => `<div style="display:flex;justify-content:space-between;font-size:10px;color:#1a0f00;font-family:'DM Sans',sans-serif;"><span>${k}</span><span style="font-weight:700;">${v}</span></div>`).join('')}
-        </div>
+        ${state.quizCombo >= 2 ? `<div class="combo-badge">🔥 x${state.quizCombo}</div>` : ''}
       </div>
+      <div style="font-family:'Playfair Display',serif;font-style:italic;font-size:18px;line-height:1.38;color:#0A0A0A;">"${q.q}"</div>
+      ${q.image ? `<img src="${q.image}" onerror="this.style.display='none'" style="width:100%;max-height:180px;object-fit:cover;border-radius:12px;margin:4px 0;background:#F0EEE8;display:block;" />` : ''}
+      ${q.options.map((opt, i) => `
+        <button class="quiz-answer" data-is-correct="${i === q.correct}" style="background:#F0EEE8;border:1.5px solid transparent;border-radius:14px;padding:13px 16px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;color:#0A0A0A;text-align:left;cursor:pointer;width:100%;transition:background 0.2s,border-color 0.2s,color 0.2s;">${opt}</button>
+      `).join('')}
+      <div id="quiz-quip" style="font-size:13px;color:rgba(239,68,68,0.85);text-align:center;font-style:italic;opacity:0;min-height:18px;transition:opacity 0.25s;"></div>
+      <button id="back-to-hub-btn" style="background:none;border:none;font-family:'DM Sans',sans-serif;font-size:13px;color:#888888;cursor:pointer;padding:0;margin-top:4px;display:block;width:100%;text-align:center;">← Volver</button>
     </div>
-    <button class="btn-outline" id="gen-card-btn">🎲 Generate New Card</button>
-    <button class="btn-primary" id="share-card-btn">📤 Share Card</button>
   `;
 }
 
 // Render functions
 function renderHype() {
-  const globalCount = 4715 + state.totalTaps * 347;
-  const pct = Math.min(globalCount / 2500000 * 100, 100);
   return `
-    ${renderQuiz()}
     <div class="panini-wrap">
       <div class="panini-card" onclick="window.open('https://www.instagram.com/timpayne__','_blank')">
         <div class="panini-top-bar">
@@ -763,45 +922,36 @@ function renderHype() {
     </div>
     <div class="pill">⚽ FIFA WORLD CUP 2026</div>
     <div>
-      <div class="title">TIM<br>PAYNE</div>
-      <div class="subtitle">The People's Player · <span class="accent">All Whites</span> · Group G</div>
+      <div class="title">Conoce a Tim Payne</div>
+      <div class="subtitle">El jugador de la Copa · <span class="accent">All Whites</span> · Grupo G</div>
     </div>
     <div class="card">
-      <div class="card-label">TIM'S ARMY — GLOBAL SUPPORT</div>
-      <div class="counter-row">
-        <div class="counter-old">4.7K</div>
-        <div class="counter-arrow">→</div>
-        <div class="counter-big" id="counter-big">${fmt(globalCount)}</div>
-      </div>
-      <div class="progress-track"><div class="progress-fill" id="progress-fill" style="width:${pct}%"></div></div>
-      <div class="counter-hint">You've tapped ${state.totalTaps.toLocaleString()} times · Every tap counts</div>
+      <div class="section-title">Cómo empezó</div>
+      <div class="story-text">El influencer argentino El Scarso buscó en todos los planteles del World Cup al jugador menos conocido. Encontró a Tim Payne — un lateral derecho de Wellington con 4.715 seguidores en Instagram. Le pidió a internet que lo siguiera. En menos de 48 horas, Tim llegó a 2,5 millones. Las marcas aparecieron. Se escribió una canción. Se imprimieron remeras en Buenos Aires. Tim le mandó un DM a El Scarso: "Me preguntaba por qué mis redes explotaban."</div>
+      <div class="story-tag">No Payne, No Gain. 🏆</div>
     </div>
-    <button class="tap-btn" id="tap-btn">
-      <span class="tap-emoji">🇳🇿</span>
-      <span class="tap-label">TAP FOR TIM</span>
-      <span class="tap-sub">+1 to the army</span>
-    </button>
-    <div class="stats-row">
-      <div class="stat-cell"><div class="stat-val">${state.sessionTaps}</div><div class="stat-lbl">Today</div></div>
-      <div class="stat-cell"><div class="stat-val">${state.streak}🔥</div><div class="stat-lbl">Streak</div></div>
-      <div class="stat-cell"><div class="stat-val">${state.points}</div><div class="stat-lbl">Points</div></div>
+    <div class="section-title">La Leyenda</div>
+    <div class="facts-grid">
+      ${TIM_FACTS.map(f => `<div class="fact-cell"><div class="fact-emoji">${f.e}</div><div class="fact-val">${f.v}</div><div class="fact-lbl">${f.l}</div></div>`).join('')}
+    </div>
+    <div class="card">
+      <div class="card-label">EL EJÉRCITO DE TIM — SEGUIDORES EN INSTAGRAM</div>
+      <div style="font-size:72px;font-weight:800;line-height:1;letter-spacing:-3px;background:linear-gradient(90deg,#FF6B6B,#FFB347,#F0C130,#47D147,#4BA3FF,#B347FF);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">4.7M+</div>
+      <div style="font-size:14px;color:#888888;margin-top:-4px;">y subiendo 🚀</div>
+      <button class="btn-primary" style="margin-top:8px;" onclick="window.open('https://www.instagram.com/timpayne__/','_blank')">Seguir a Tim en Instagram →</button>
+      <div style="font-size:12px;color:#BBBBBB;text-align:center;">¿Todavía no lo seguís? Únete a 4,2M de fans.</div>
+    </div>
+    <div class="stats-row" style="grid-template-columns:repeat(2,1fr)">
+      <div class="stat-cell"><div class="stat-val">${state.streak}🔥</div><div class="stat-lbl">Racha</div></div>
+      <div class="stat-cell"><div class="stat-val">${state.points}</div><div class="stat-lbl">Puntos</div></div>
     </div>
     <div class="card chant-card">
       <div class="chant-quote">"</div>
       <div class="chant-text">${CHANTS[state.chantIdx]}</div>
       <div class="chant-footer">
-        <span class="chant-src">— The internet, 2026</span>
+        <span class="chant-src">— Internet, 2026</span>
         <button class="share-inline" onclick="shareText('${CHANTS[state.chantIdx].replace(/'/g,"\\'")}')">📤 Share</button>
       </div>
-    </div>
-    <div class="section-title">The Legend</div>
-    <div class="facts-grid">
-      ${TIM_FACTS.map(f => `<div class="fact-cell"><div class="fact-emoji">${f.e}</div><div class="fact-val">${f.v}</div><div class="fact-lbl">${f.l}</div></div>`).join('')}
-    </div>
-    <div class="card">
-      <div class="section-title">How it started</div>
-      <div class="story-text">Argentine influencer El Scarso searched every World Cup squad for the least-known player. He found Tim Payne — a right back from Wellington with 4,715 Instagram followers. He asked the internet to follow him. Within 48 hours, Tim hit 2.5 million. Brands piled in. A song was written. T-shirts were printed in Buenos Aires. Tim DMed El Scarso: "Was wondering why my socials were blowing up."</div>
-      <div class="story-tag">No Payne, No Gain. 🏆</div>
     </div>
   `;
 }
@@ -809,14 +959,15 @@ function renderHype() {
 function renderMissions() {
   const done = state.completedMissions.length;
   return `
-    <div class="section-title" style="font-size:28px">Daily Missions</div>
-    <div class="subtitle">${done}/${MISSIONS.length} completed · ${state.points} Payne Points</div>
+    ${renderMatchTracker()}
+    <div class="section-title" style="font-size:22px;margin-top:8px;">Misiones Diarias</div>
+    <div class="subtitle">${done}/${MISSIONS.length} completadas · ${state.points} Payne Points</div>
     <div class="streak-card">
       <div class="streak-row">
         <span style="font-size:28px">🔥</span>
         <div>
-          <div class="streak-val">${state.streak}-day streak</div>
-          <div class="streak-hint">Come back tomorrow to keep it going</div>
+          <div class="streak-val">${state.streak} días de racha</div>
+          <div class="streak-hint">Volvé mañana para mantenerla</div>
         </div>
       </div>
       <div class="progress-track"><div class="progress-fill" style="width:${Math.min(state.streak/30*100,100)}%"></div></div>
@@ -834,7 +985,7 @@ function renderMissions() {
           <div class="pts-badge">+${m.pts}</div>
         </div>
         <div class="mission-track"><div class="mission-fill ${isDone ? 'done' : ''}" style="width:${Math.min(progress*100,100)}%"></div></div>
-        ${isDone ? '<div class="completed-tag">✅ Completed</div>' : ''}
+        ${isDone ? '<div class="completed-tag">✅ Completada</div>' : ''}
       </div>`;
     }).join('')}
   `;
@@ -842,51 +993,49 @@ function renderMissions() {
 
 function renderChants() {
   return `
-    ${renderTimCard()}
-    <div class="section-title" style="font-size:28px">Chants</div>
-    <div class="subtitle">Generate yours or browse fan favourites</div>
+    <div class="section-title" style="font-size:28px">Cantos</div>
+    <div class="subtitle">Generá el tuyo o explorá los favoritos de los fans</div>
     <div class="card">
-      <div style="font-size:16px;font-weight:700">🎵 Create Your Chant</div>
-      <input class="input" id="chant-name" placeholder="Your name" maxlength="30" />
-      <input class="input" id="chant-country" placeholder="Your country (optional)" maxlength="30" />
-      <button class="btn-primary" id="generate-btn">Generate Chant 🎶</button>
+      <div style="font-size:16px;font-weight:700">🎵 Creá tu Canto</div>
+      <input class="input" id="chant-name" placeholder="Tu nombre" maxlength="30" />
+      <input class="input" id="chant-country" placeholder="Tu país (opcional)" maxlength="30" />
+      <button class="btn-primary" id="generate-btn">Generar Canto 🎶</button>
     </div>
     ${state.generatedChant ? `
     <div class="card" style="border-color:var(--border-active)">
       <div class="generated-text">${state.generatedChant}</div>
-      <button class="btn-primary" onclick="shareText(document.querySelector('.generated-text').textContent)">📤 Share This Chant</button>
+      <button class="btn-primary" onclick="shareText(document.querySelector('.generated-text').textContent)">📤 Compartir este Canto</button>
     </div>` : ''}
-    <div class="section-title">Fan Chants</div>
-    <div class="subtitle">Viewed today: ${state.chantsViewed}</div>
+    <div class="section-title">Cantos de Fans</div>
+    <div class="subtitle">Vistos hoy: ${state.chantsViewed}</div>
     <div class="card chant-card" id="fan-chant-card" style="cursor:pointer">
       <div class="chant-quote">"</div>
       <div class="chant-text">${CHANTS[state.fanChantIdx]}</div>
       <div class="chant-footer">
-        <span class="chant-src">— Tap to cycle</span>
+        <span class="chant-src">— Tocá para ver más</span>
         <span class="chant-src">${state.fanChantIdx + 1}/${CHANTS.length}</span>
       </div>
     </div>
-    <button class="btn-outline" onclick="shareText('${CHANTS[state.fanChantIdx].replace(/'/g,"\\'")}')">📤 Share This One</button>
+    <button class="btn-outline" onclick="shareText('${CHANTS[state.fanChantIdx].replace(/'/g,"\\'")}')">📤 Compartir este</button>
   `;
 }
 
 function renderProfile() {
   const stats = [
-    { e:'👆', v: state.totalTaps.toLocaleString(), l:'Total Taps' },
-    { e:'⭐', v: state.points.toLocaleString(), l:'Points' },
-    { e:'🔥', v: `${state.streak}d`, l:'Streak' },
-    { e:'📤', v: state.sharesCount.toString(), l:'Shares' },
-    { e:'🏆', v: `${state.unlockedBadges.length}/${BADGES.length}`, l:'Badges' },
-    { e:'📅', v: new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short'}), l:'Since' },
+    { e:'⭐', v: state.points.toLocaleString(), l:'Puntos' },
+    { e:'🔥', v: `${state.streak}d`, l:'Racha' },
+    { e:'📤', v: state.sharesCount.toString(), l:'Compartidos' },
+    { e:'🏆', v: `${state.unlockedBadges.length}/${BADGES.length}`, l:'Insignias' },
+    { e:'📅', v: new Date().toLocaleDateString('es-AR',{day:'2-digit',month:'short'}), l:'Desde' },
   ];
   return `
-    <div class="section-title" style="font-size:28px">Your Profile</div>
-    <div class="subtitle">Tim Payne's Army · Fan</div>
+    <div class="section-title" style="font-size:28px">Tu Perfil</div>
+    <div class="subtitle">El Ejército de Tim Payne · Fan</div>
     <div class="facts-grid" style="grid-template-columns:repeat(3,1fr)">
       ${stats.map(s => `<div class="stat-cell"><span style="font-size:22px">${s.e}</span><div class="stat-val" style="font-size:16px">${s.v}</div><div class="stat-lbl">${s.l}</div></div>`).join('')}
     </div>
-    <div class="section-title">Badge Collection</div>
-    <div class="subtitle">${state.unlockedBadges.length} of ${BADGES.length} unlocked</div>
+    <div class="section-title">Colección de Insignias</div>
+    <div class="subtitle">${state.unlockedBadges.length} de ${BADGES.length} desbloqueadas</div>
     <div class="badge-grid">
       ${BADGES.map(b => {
         const unlocked = state.unlockedBadges.includes(b.id);
@@ -903,20 +1052,20 @@ function renderProfile() {
       ).join('')}
     </div>
     <div class="card">
-      <div style="font-size:15px;font-weight:700">Follow Tim</div>
+      <div style="font-size:15px;font-weight:700">Seguir a Tim</div>
       <button class="link-btn" onclick="window.open('https://www.instagram.com/timpayne__','_blank')">📸 Instagram — @timpayne</button>
       <button class="link-btn" onclick="window.open('https://www.instagram.com/elscarso','_blank')">🇦🇷 El Scarso — @elscarso</button>
     </div>
     <div class="card">
-      <div style="font-size:15px;font-weight:700">About</div>
-      <div class="about-text">Unofficial fan app. Not affiliated with FIFA, Wellington Phoenix, or Tim Payne. Made with love by fans, for fans.</div>
+      <div style="font-size:15px;font-weight:700">Acerca de</div>
+      <div class="about-text">App de fans no oficial. Sin afiliación con FIFA, Wellington Phoenix ni Tim Payne. Hecha con amor por fans, para fans.</div>
       <div class="version-text">v1.0.0 · No Payne, No Gain 🇳🇿</div>
     </div>
     <div style="text-align:center;padding:16px 0 8px;display:flex;flex-wrap:wrap;justify-content:center;gap:6px 20px;">
-      <a href="/privacy" style="color:#555;font-size:12px;text-decoration:none;font-family:sans-serif;">Privacy Policy</a>
-      <a href="/terms" style="color:#555;font-size:12px;text-decoration:none;font-family:sans-serif;">Terms</a>
-      <a href="/data-compliance" style="color:#555;font-size:12px;text-decoration:none;font-family:sans-serif;">Data & Compliance</a>
-      <a href="/trademark" style="color:#555;font-size:12px;text-decoration:none;font-family:sans-serif;">Trademark & IP</a>
+      <a href="/privacy" style="color:#555;font-size:12px;text-decoration:none;font-family:sans-serif;">Política de Privacidad</a>
+      <a href="/terms" style="color:#555;font-size:12px;text-decoration:none;font-family:sans-serif;">Términos</a>
+      <a href="/data-compliance" style="color:#555;font-size:12px;text-decoration:none;font-family:sans-serif;">Datos y Cumplimiento</a>
+      <a href="/trademark" style="color:#555;font-size:12px;text-decoration:none;font-family:sans-serif;">Marcas y Propiedad</a>
     </div>
   `;
 }
@@ -927,28 +1076,25 @@ function renderModal() {
   return `
     <div class="modal-overlay" id="modal-overlay">
       <div class="modal-card" style="border-color:${b.color}">
-        <div class="modal-label">🎉 BADGE UNLOCKED</div>
+        <div class="modal-label">🎉 INSIGNIA DESBLOQUEADA</div>
         <div class="modal-emoji">${b.emoji}</div>
         <div class="modal-name" style="color:${b.color}">${b.name}</div>
         <div class="modal-desc">${b.desc}</div>
         <div class="modal-rarity" style="color:${b.color}">${b.rarity.toUpperCase()}</div>
-        <button class="btn-primary" style="width:auto;padding:12px 32px" onclick="dismissBadge()">Nice! 🎉</button>
+        <button class="btn-primary" style="width:auto;padding:12px 32px" onclick="dismissBadge()">¡Buenísimo! 🎉</button>
       </div>
     </div>
   `;
 }
 
 function renderNav() {
-  const tabs = [
-    { id: 'hype', emoji: '🇳🇿', label: 'Hype' },
-    { id: 'missions', emoji: '⚽', label: 'Missions' },
-    { id: 'chants', emoji: '🎵', label: 'Chants' },
-    { id: 'profile', emoji: '🏆', label: 'Profile' },
-  ];
-  return tabs.map(t => `
-    <button class="nav-item ${state.tab === t.id ? 'active' : ''}" onclick="switchTab('${t.id}')">
-      <span class="nav-emoji">${t.emoji}</span>
-      ${t.label}
+  const tabs = ['quiz','hype','missions','chants','profile'];
+  const labels = {quiz:'Quiz',hype:'Hype',missions:'Misiones',chants:'Cantos',profile:'Perfil'};
+  const icons = {quiz:'fa-solid fa-trophy',hype:'fa-solid fa-fire',missions:'fa-solid fa-bullseye',chants:'fa-solid fa-music',profile:'fa-solid fa-user'};
+  return tabs.map(id => `
+    <button class="nav-item ${state.tab === id ? 'active' : ''}" onclick="switchTab('${id}')">
+      <i class="${icons[id]}" style="font-size:18px;display:block;margin-bottom:4px;"></i>
+      ${labels[id]}
     </button>
   `).join('');
 }
@@ -959,11 +1105,19 @@ function render() {
   nav.innerHTML = renderNav();
 
   let html = '';
-  if (state.tab === 'hype') html = renderHype();
+  if (state.tab === 'missions') awardPredictionPoints();
+  if (state.tab === 'quiz') html = renderQuizTab();
+  else if (state.tab === 'hype') html = renderHype();
   else if (state.tab === 'missions') html = renderMissions();
   else if (state.tab === 'chants') html = renderChants();
   else if (state.tab === 'profile') html = renderProfile();
   content.innerHTML = html;
+
+  // Result count-up + confetti
+  if (state.tab === 'quiz' && state.quizStep === 6) {
+    startCountUp(state.quizScore * 20);
+    spawnResultConfetti();
+  }
 
   // Modal
   const existing = document.getElementById('modal-overlay');
@@ -972,40 +1126,13 @@ function render() {
     document.body.insertAdjacentHTML('beforeend', renderModal());
   }
 
-  // Bind events
-  const tapBtn = document.getElementById('tap-btn');
-  if (tapBtn) {
-    tapBtn.addEventListener('click', (e) => {
-      state.totalTaps++;
-      state.sessionTaps++;
-      state.chantIdx = (state.chantIdx + 1) % CHANTS.length;
-      spawnParticle(e);
-      checkMissions();
-      checkBadges();
-      // Update just the counter without full re-render
-      const cb = document.getElementById('counter-big');
-      const pf = document.getElementById('progress-fill');
-      if (cb) {
-        const gc = 4715 + state.totalTaps * 347;
-        cb.textContent = fmt(gc);
-        if (pf) pf.style.width = Math.min(gc/2500000*100,100) + '%';
-      }
-      // Update chant text
-      const ct = content.querySelector('.chant-text');
-      if (ct) ct.textContent = CHANTS[state.chantIdx];
-      // Update stats
-      const vals = content.querySelectorAll('.stat-val');
-      if (vals[0]) vals[0].textContent = state.sessionTaps;
-      if (vals[2]) vals[2].textContent = state.points;
-    });
-  }
-
+  // Chant generator
   const genBtn = document.getElementById('generate-btn');
   if (genBtn) {
     genBtn.addEventListener('click', () => {
-      const name = document.getElementById('chant-name').value.trim();
-      const country = document.getElementById('chant-country').value.trim() || 'Planet Earth';
-      if (!name) { alert('Enter your name to generate a chant!'); return; }
+      const name = escapeHtml(document.getElementById('chant-name').value.trim());
+      const country = escapeHtml(document.getElementById('chant-country').value.trim()) || 'Planet Earth';
+      if (!name) { alert('¡Ingresá tu nombre para generar un canto!'); return; }
       const tmpl = CHANT_TEMPLATES[Math.floor(Math.random() * CHANT_TEMPLATES.length)];
       state.generatedChant = tmpl.replace(/\{name\}/g, name).replace(/\{country\}/g, country);
       state.chantGenerated = true;
@@ -1014,64 +1141,151 @@ function render() {
     });
   }
 
-  // Quiz
+  // Quiz: start (hub featured or active category)
   const startQuizBtn = document.getElementById('start-quiz-btn');
   if (startQuizBtn) {
-    startQuizBtn.addEventListener('click', () => { state.quizStep = 1; state.quizScore = 0; render(); });
-  }
-
-  document.querySelectorAll('.quiz-answer').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const pts = parseInt(btn.dataset.pts);
-      btn.style.background = 'rgba(240,193,48,0.14)';
-      btn.style.borderColor = 'rgba(240,193,48,0.5)';
-      btn.style.color = '#F0C130';
-      document.querySelectorAll('.quiz-answer').forEach(b => b.disabled = true);
-      setTimeout(() => {
-        const qc = document.querySelector('.quiz-card');
-        if (qc) { qc.style.transition = 'opacity 0.18s ease, transform 0.18s ease'; qc.style.opacity = '0'; qc.style.transform = 'translateY(6px)'; }
-      }, 180);
-      setTimeout(() => {
-        state.quizScore += pts;
-        state.quizStep = state.quizStep < 6 ? state.quizStep + 1 : 7;
-        render();
-      }, 380);
+    startQuizBtn.addEventListener('click', () => {
+      if (state.activeQuiz === null) state.activeQuiz = 'timpayne';
+      pickQuizQuestions();
+      state.quizStep = 1; state.quizScore = 0; state.quizCombo = 0;
+      render();
     });
-  });
-
-  const retakeQuizBtn = document.getElementById('retake-quiz-btn');
-  if (retakeQuizBtn) {
-    retakeQuizBtn.addEventListener('click', () => { state.quizStep = 1; state.quizScore = 0; render(); });
   }
 
+  // Quiz: play again (same category, fresh 5)
+  const playAgainBtn = document.getElementById('play-again-btn');
+  if (playAgainBtn) {
+    playAgainBtn.addEventListener('click', () => {
+      pickQuizQuestions();
+      state.quizStep = 1; state.quizScore = 0; state.quizCombo = 0;
+      render();
+    });
+  }
+
+  // Quiz: back to hub
+  const backToHubBtn = document.getElementById('back-to-hub-btn');
+  if (backToHubBtn) {
+    backToHubBtn.addEventListener('click', () => {
+      state.activeQuiz = null; state.quizStep = 0;
+      render();
+    });
+  }
+
+  // Quiz: share result
   const shareQuizBtn = document.getElementById('share-quiz-btn');
   if (shareQuizBtn) {
     shareQuizBtn.addEventListener('click', () => {
-      const r = getQuizResult(state.quizScore);
-      const text = `${r.pct}% Tim Payne. ${r.desc} 🇳🇿 #NoPayneNoGain timpaynefans.vercel.app`;
+      const pct = state.quizScore * 20;
+      let text;
+      if (state.activeQuiz === 'timpayne') {
+        const tier = QUIZ_TIERS.find(t => state.quizScore >= t.min) || QUIZ_TIERS[QUIZ_TIERS.length - 1];
+        text = `Soy ${pct}% Tim Payne. ${tier.desc} 🇳🇿 #NoPayneNoGain timpaynefans.vercel.app`;
+      } else {
+        const cat = CATEGORIES.find(c => c.id === state.activeQuiz) || { label: 'Quiz' };
+        text = `Saqué ${state.quizScore}/5 en "${cat.label}" ⚽ #NoPayneNoGain timpaynefans.vercel.app`;
+      }
       if (navigator.share) { navigator.share({ text }).catch(() => {}); }
-      else { navigator.clipboard.writeText(text).then(() => alert('Result copied! 📋')); }
+      else { navigator.clipboard.writeText(text).then(() => alert('¡Resultado copiado! 📋')); }
     });
   }
 
-  const genCardBtn = document.getElementById('gen-card-btn');
-  if (genCardBtn) {
-    genCardBtn.addEventListener('click', () => {
-      const card = document.querySelector('.tim-card');
-      if (card) { card.style.transition = 'opacity 0.18s ease, transform 0.18s ease'; card.style.opacity = '0'; card.style.transform = 'scale(0.96)'; }
-      setTimeout(() => { generateCard(); render(); }, 190);
+  // Quiz: category cards
+  CATEGORIES.forEach(cat => {
+    const el = document.getElementById(`cat-${cat.id}`);
+    if (el) {
+      el.addEventListener('click', () => {
+        state.activeQuiz = cat.id;
+        pickQuizQuestions();
+        state.quizStep = 1; state.quizScore = 0; state.quizCombo = 0;
+        render();
+      });
+    }
+  });
+
+  // Quiz: answers
+  document.querySelectorAll('.quiz-answer').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.quiz-answer').forEach(b => b.disabled = true);
+      const isCorrect = btn.dataset.isCorrect === 'true';
+      if (isCorrect) {
+        btn.style.background = 'rgba(34,197,94,0.18)';
+        btn.style.borderColor = 'rgba(34,197,94,0.55)';
+        btn.style.color = '#4ade80';
+        spawnConfetti(btn);
+        spawnPlusOne(btn);
+        state.quizScore++;
+        state.quizCombo++;
+        setTimeout(() => { state.quizStep++; render(); }, 1200);
+      } else {
+        btn.style.background = 'rgba(239,68,68,0.15)';
+        btn.style.borderColor = 'rgba(239,68,68,0.5)';
+        btn.style.color = '#f87171';
+        document.querySelectorAll('.quiz-answer').forEach(b => {
+          if (b.dataset.isCorrect === 'true') {
+            b.style.background = 'rgba(240,193,48,0.14)';
+            b.style.borderColor = 'rgba(240,193,48,0.5)';
+            b.style.color = '#F0C130';
+          }
+        });
+        spawnWrongX();
+        state.quizCombo = 0;
+        const quip = WRONG_QUIPS[Math.floor(Math.random() * WRONG_QUIPS.length)];
+        const quipEl = document.getElementById('quiz-quip');
+        if (quipEl) { quipEl.textContent = quip; quipEl.style.opacity = '1'; }
+        setTimeout(() => { state.quizStep++; render(); }, 1500);
+      }
     });
+  });
+
+  // Prediction: countdown timer
+  if (state.tab === 'missions') {
+    clearInterval(countdownInterval);
+    countdownInterval = setInterval(updateCountdowns, 60000);
+    updateCountdowns();
+  } else {
+    clearInterval(countdownInterval);
   }
 
-  const shareCardBtn = document.getElementById('share-card-btn');
-  if (shareCardBtn) {
-    shareCardBtn.addEventListener('click', () => {
-      const text = "Just generated Tim Payne's FIFA card and honestly it checks out 🇳🇿⚽ #TimPayne #NoPayneNoGain #WorldCup2026 timpaynefans.vercel.app";
+  // Prediction: pill selectors
+  document.querySelectorAll('.pred-pill').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const { match, field, value } = btn.dataset;
+      const pred = state.predictions[match];
+      if (!pred || pred.locked) return;
+      // coerce string to boolean for boolean fields
+      pred[field] = (value === 'true') ? true : (value === 'false') ? false : value;
+      render();
+    });
+  });
+
+  // Prediction: lock buttons
+  NZ_MATCHES.forEach(match => {
+    const lockBtn = document.getElementById(`lock-pred-${match.id}`);
+    if (lockBtn && !lockBtn.disabled) {
+      lockBtn.addEventListener('click', () => {
+        state.predictions[match.id].locked = true;
+        render();
+      });
+    }
+  });
+
+  // Prediction: share leaderboard
+  const predShareBtn = document.getElementById('pred-share-btn');
+  if (predShareBtn) {
+    predShareBtn.addEventListener('click', () => {
+      let total = 0;
+      NZ_MATCHES.forEach(m => {
+        if (!m.result) return;
+        const p = state.predictions[m.id]; const r = m.result;
+        total += [p.result===r.outcome, p.timStarts===r.timStarted, p.timScores===r.timScored, p.motm===r.motm].filter(Boolean).length;
+      });
+      const text = `Tengo ${total}/12 predicciones del World Cup de NZ correctas hasta ahora 🇳🇿 #NoPayneNoGain timpaynefans.vercel.app`;
       if (navigator.share) { navigator.share({ text }).catch(() => {}); }
-      else { navigator.clipboard.writeText(text).then(() => alert('Tweet copied! 📋')); }
+      else { navigator.clipboard.writeText(text).then(() => alert('¡Puntaje copiado! 📋')); }
     });
   }
 
+  // Fan chant carousel
   const fanChantCard = document.getElementById('fan-chant-card');
   if (fanChantCard) {
     fanChantCard.addEventListener('click', () => {

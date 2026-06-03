@@ -18,7 +18,8 @@
       "Bash(node *)",
       "Bash(sips *)",
       "Bash(ffmpeg -i /Users/andresthomas/Desktop/PROJECTS/NoPayneNoGain/assets/icon.png -vf format=rgb24 /Users/andresthomas/Desktop/PROJECTS/NoPayneNoGain/assets/icon_noalpha.png)",
-      "Bash(npx sharp-cli *)"
+      "Bash(npx sharp-cli *)",
+      "Bash(grep *)"
     ]
   }
 }
