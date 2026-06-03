@@ -741,7 +741,7 @@ function escapeHtml(str) {
 }
 
 function shareText(text) {
-  const full = text + '\n\n🇳🇿 No Payne, No Gain\ntimpaynefans.vercel.app';
+  const full = text + '\n\n🇳🇿 No Payne, No Gain\ntimpaynefans.com';
   if (navigator.share) {
     navigator.share({ text: full }).catch(() => {});
   } else {
@@ -1179,10 +1179,10 @@ function render() {
       let text;
       if (state.activeQuiz === 'timpayne') {
         const tier = QUIZ_TIERS.find(t => state.quizScore >= t.min) || QUIZ_TIERS[QUIZ_TIERS.length - 1];
-        text = `Soy ${pct}% Tim Payne. ${tier.desc} 🇳🇿 #NoPayneNoGain timpaynefans.vercel.app`;
+        text = `Soy ${pct}% Tim Payne. ${tier.desc} 🇳🇿 #NoPayneNoGain timpaynefans.com`;
       } else {
         const cat = CATEGORIES.find(c => c.id === state.activeQuiz) || { label: 'Quiz' };
-        text = `Saqué ${state.quizScore}/5 en "${cat.label}" ⚽ #NoPayneNoGain timpaynefans.vercel.app`;
+        text = `Saqué ${state.quizScore}/5 en "${cat.label}" ⚽ #NoPayneNoGain timpaynefans.com`;
       }
       if (navigator.share) { navigator.share({ text }).catch(() => {}); }
       else { navigator.clipboard.writeText(text).then(() => alert('¡Resultado copiado! 📋')); }
@@ -1279,7 +1279,7 @@ function render() {
         const p = state.predictions[m.id]; const r = m.result;
         total += [p.result===r.outcome, p.timStarts===r.timStarted, p.timScores===r.timScored, p.motm===r.motm].filter(Boolean).length;
       });
-      const text = `Tengo ${total}/12 predicciones del World Cup de NZ correctas hasta ahora 🇳🇿 #NoPayneNoGain timpaynefans.vercel.app`;
+      const text = `Tengo ${total}/12 predicciones del World Cup de NZ correctas hasta ahora 🇳🇿 #NoPayneNoGain timpaynefans.com`;
       if (navigator.share) { navigator.share({ text }).catch(() => {}); }
       else { navigator.clipboard.writeText(text).then(() => alert('¡Puntaje copiado! 📋')); }
     });
