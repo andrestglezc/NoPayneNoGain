@@ -2,6 +2,62 @@
 
 ---
 
+## 2026-06-03 (session 4)
+
+### Spanish translation completed
+Finished full Argentine/LATAM Spanish translation of all UI text in `web/index.html`. All render functions, share texts, quiz questions (35 main + 60 category), wrong-answer quips, result descriptions, badge/mission names, chant templates, prediction labels, modal text, and alert strings translated. Proper nouns, hashtags, and the URL preserved in English.
+
+### Security audit + fixes
+Full security scan across all project files. Applied 6 fixes:
+- CSP headers, X-Frame-Options, X-Content-Type-Options, Referrer-Policy, Permissions-Policy added to `web/vercel.json`
+- `escapeHtml()` added to chant generator to prevent self-XSS via name/country inputs
+- Font Awesome SRI hash added then removed (hash was incorrect, causing icons to disappear — removed to restore icons; CSP still restricts CDN to style/font only)
+- `.vercel/` added to `.gitignore`
+- `shareText()` URL fixed from `nopaynegain.vercel.app` to `timpaynefans.com`
+- `<html lang="es">` set
+
+### Custom domain
+All URLs updated from `timpaynefans.vercel.app` to `timpaynefans.com` across `index.html`, `privacy.html`, `terms.html`. OG meta tags and share texts all point to `timpaynefans.com`.
+
+### OG image
+Created `web/og-image.html` — standalone 1200×630 screenshot source with dark background, gold accent bar, Oswald + DM Sans. Screenshotted to `web/og-image.png` and deployed. Updated all OG + Twitter Card meta tags in `index.html`.
+
+### Quiz category card redesign
+- Added `image` field to all 6 `CATEGORIES` entries
+- 6 background images copied to `web/images/` and resized with `sips`
+- Cards redesigned: top-image (200px, object-fit cover, scale 1.15) + white bottom section (chip, name 18px/700, subtitle 13px, gold arrow)
+- Grid changed from 2-column to single-column
+- `aspect-ratio: 16/9` on images for consistency
+
+### Featured quiz card
+- Replaced `hero_card.jpg` image with animated dark atmospheric gradient
+- `@keyframes goldPulse` (3s ease-in-out infinite) on `::before` pseudo-element
+- 4 floating gold particle divs (`@keyframes particleFloat`)
+- Text colors updated to white/white-60 for dark background
+
+### Onboarding flow (3 slides, first-visit only)
+Built complete onboarding in `initOnboarding()`:
+- 3 full-screen gradient slides: pink→magenta (`#FF6B6B→#E91E8C`), navy (`#667EEA→#764BA2`), pink→coral (`#F093FB→#FDB99B`)
+- Real images: `onboard1/2/3.png` (600×600, resized with sips)
+- Crossfade transitions: overlapping opacity (next fades in at 150ms, current hidden at 250ms — no flash gap)
+- Scroll lock: `body.style.overflow/position/width` locked on show, restored on dismiss
+- Safe area: `padding-top: max(env(safe-area-inset-top), 44px)` on each slide for notch/Dynamic Island
+- `viewport-fit=cover` added to meta viewport
+- Button-only navigation (swipe removed)
+- `localStorage: onboarding_seen` — shows once, never again
+
+### Misc fixes
+- `'¿Cuánto % Tim Payne eres?'` → `'¿Sos del Ejército de Tim Payne?'` (both instances)
+- `4.2M+` → `4.7M+` follower counter
+- `El jugador del pueblo` → `El jugador de la Copa` (subtitle only)
+- CSP `connect-src 'none'` → `connect-src 'self'` (was breaking page load in some browsers)
+- `unsafe-eval` added to `script-src`
+
+### Deploys
+Multiple production deploys to `timpaynefans.com` throughout session. Final commit: `2927efa` — "feat: onboarding complete — scroll lock, notch fix, crossfade transitions, button-only nav".
+
+---
+
 ## 2026-06-01 (session 3)
 
 ### Hermes / dependency debugging
