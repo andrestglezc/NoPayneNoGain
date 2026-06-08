@@ -12,10 +12,19 @@
       "distribution": "internal"
     },
     "production": {
-      "autoIncrement": true
+      "autoIncrement": true,
+      "ios": {
+        "image": "latest"
+      }
     }
   },
   "submit": {
-    "production": {}
+    "production": {
+      "ios": {
+        "appleId": "andywithout@gmail.com",
+        "ascAppId": "6778185257",
+        "appleTeamId": "7YH8CW7T2X"
+      }
+    }
   }
 }
