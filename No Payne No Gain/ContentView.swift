@@ -8,14 +8,28 @@
 import SwiftUI
 
 struct ContentView: View {
+    @State private var appState = AppState()
+
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        TabView {
+            Tab("Quiz", systemImage: "trophy.fill") {
+                QuizView()
+            }
+            Tab("Hype", systemImage: "flame.fill") {
+                HypeView()
+            }
+            Tab("Misiones", systemImage: "target") {
+                MisionesView()
+            }
+            Tab("Cantos", systemImage: "music.note") {
+                CantosView()
+            }
+            Tab("Perfil", systemImage: "person.fill") {
+                PerfilView()
+            }
         }
-        .padding()
+        .environment(appState)
+        .onAppear { appState.checkAndUpdateStreak() }
     }
 }
 
