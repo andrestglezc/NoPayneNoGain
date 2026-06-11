@@ -351,7 +351,7 @@ private struct RarityLegend: View {
 private struct FollowTimCard: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 14) {
-            Text("Seguir a Tim")
+            Text("Seguir a Tim y a El Scarso")
                 .font(.system(size: 17, weight: .bold))
                 .foregroundStyle(.white)
 
