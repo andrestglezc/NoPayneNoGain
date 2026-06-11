@@ -15,11 +15,21 @@
 - Global dark nav/tab bar appearance (#070A0D)
 - Assets: tim-photo (1x/2x/3x), panini-card (legacy), app icon
 - Extensions.swift: shared Color(hex:) helper
+- Tab reorder: Hype → Quiz → Misiones → Cantos → Perfil
+- Emoji titles on screen headers (Hype 🔥, Quiz 🧠, Tu Perfil 👤) — tab bar labels stay plain
+- Figurita CTA moved to Perfil only (removed from Hype)
+- Cantos: shows 3 chants by default with "Ver más cantos" load more
+- FanIdentityCard: fan number as hero, rank demoted to secondary "Rango:" label
+- Logros 🏆 section header (was Colección de Insignias)
+- Follow section includes El Scarso link + updated title ("Seguir a Tim y a El Scarso")
+- GitHub remote: https://github.com/andrestglezc/NoPayneNoGain.git
 
 ## TODO
-- (all four prior TODOs done: Quiz redesign, Figurita, Perfil redesign, app icon)
-- All work committed + pushed to GitHub as of June 11
 - QA full app on device before June 16
+- Quiz hub: redesign main section UI
+- Quiz game: screen-level tweaks to question flow
+- Onboarding: 3 screens, native SwiftUI, visually outstanding — first launch only, persisted via AppState
+- App Store: screenshots, metadata, submission — target approval before NZ vs Iran (June 16)
 
 ## Key technical notes
 - Zero external dependencies — pure SwiftUI + CoreMotion + CAEmitterLayer
