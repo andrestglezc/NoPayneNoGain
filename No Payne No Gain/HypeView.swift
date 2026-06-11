@@ -22,7 +22,7 @@ struct HypeView: View {
                     .padding(.bottom, 40)
                 }
             }
-            .navigationTitle("Hype")
+            .navigationTitle("Hype 🔥")
             .navigationBarTitleDisplayMode(.large)
             .toolbarColorScheme(.dark, for: .navigationBar)
         }

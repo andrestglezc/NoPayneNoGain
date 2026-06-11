@@ -87,7 +87,7 @@ struct PerfilView: View {
                     .padding(.vertical, 12)
                 }
             }
-            .navigationTitle("Tu Perfil")
+            .navigationTitle("Tu Perfil 👤")
             .navigationBarTitleDisplayMode(.large)
             .toolbarColorScheme(.dark, for: .navigationBar)
             .sheet(isPresented: $showFigurita) {

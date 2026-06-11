@@ -276,7 +276,7 @@ struct QuizView: View {
                     .padding(.vertical, 12)
                 }
             }
-            .navigationTitle("Quiz")
+            .navigationTitle("Quiz 🧠")
             .navigationBarTitleDisplayMode(.large)
             .toolbarColorScheme(.dark, for: .navigationBar)
             .navigationDestination(for: QuizCategory.self) { cat in
