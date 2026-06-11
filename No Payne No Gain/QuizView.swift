@@ -499,6 +499,7 @@ struct QuizGameView: View {
                     question: questions[currentIndex],
                     questionNumber: currentIndex + 1,
                     total: questions.count,
+                    score: score,
                     selectedAnswer: $selectedAnswer,
                     onAnswer: handleAnswer
                 )
@@ -587,59 +588,83 @@ struct QuizGameView: View {
 
 // MARK: - Quiz Question View
 
+// Neo-brutalism option palette — A / B / C / D
+private let quizOptionColors: [Color] = [
+    Color(hex: "#E91E76"),   // A · hot pink
+    Color(hex: "#2ECC71"),   // B · emerald green
+    Color(hex: "#F0C130"),   // C · gold yellow
+    Color(hex: "#3498DB"),   // D · sky blue
+]
+private let quizCorrectGreen = Color(hex: "#2ECC71")
+
 private struct QuizQuestionView: View {
     let question: QuizQuestion
     let questionNumber: Int
     let total: Int
+    let score: Int
     @Binding var selectedAnswer: Int?
     let onAnswer: (Int) -> Void
 
     var body: some View {
-        VStack(spacing: 24) {
-            Spacer()
-
-            // Progress + question number
-            VStack(spacing: 8) {
+        VStack(spacing: 0) {
+            // TOP BAR — question counter centered, running score on the right
+            ZStack {
                 Text("PREGUNTA \(questionNumber) DE \(total)")
-                    .font(.headline)
-                    .kerning(2)
-                    .foregroundStyle(Color.white.opacity(0.4))
-                    .frame(maxWidth: .infinity, alignment: .center)
-                GeometryReader { geo in
-                    ZStack(alignment: .leading) {
-                        RoundedRectangle(cornerRadius: 3).fill(Color.white.opacity(0.1))
-                        RoundedRectangle(cornerRadius: 3)
-                            .fill(Color(hex: "#F0C130"))
-                            .frame(width: geo.size.width * CGFloat(questionNumber - 1) / CGFloat(total))
-                    }
+                    .font(.title3)
+                    .fontWeight(.bold)
+                    .foregroundStyle(.white)
+                HStack(spacing: 5) {
+                    Spacer()
+                    Text("⚽")
+                        .font(.system(size: 16))
+                    Text("\(score)")
+                        .font(.title3)
+                        .fontWeight(.heavy)
+                        .foregroundStyle(Color(hex: "#F0C130"))
+                        .contentTransition(.numericText())
                 }
-                .frame(height: 5)
             }
+            .padding(.bottom, 16)
 
-            // Question
-            Text("\"\(question.question)\"")
-                .font(.title3)
+            // PROGRESS BAR — chunky gold
+            GeometryReader { geo in
+                ZStack(alignment: .leading) {
+                    Capsule().fill(Color.white.opacity(0.12))
+                    Capsule()
+                        .fill(Color(hex: "#F0C130"))
+                        .frame(width: max(0, geo.size.width * CGFloat(questionNumber) / CGFloat(total)))
+                }
+            }
+            .frame(height: 6)
+            .padding(.bottom, 28)
+
+            // QUESTION — left aligned, bold, no quotes
+            Text(question.question)
+                .font(.title2)
                 .fontWeight(.bold)
-                .italic()
                 .foregroundStyle(.white)
-                .multilineTextAlignment(.center)
-                .lineSpacing(3)
+                .multilineTextAlignment(.leading)
+                .lineSpacing(2)
                 .fixedSize(horizontal: false, vertical: true)
+                .frame(maxWidth: .infinity, alignment: .leading)
 
-            // Options
-            VStack(spacing: 10) {
+            Spacer(minLength: 24)
+
+            // ANSWER BUTTONS — bright neo-brutalism blocks
+            VStack(spacing: 14) {
                 ForEach(0..<question.options.count, id: \.self) { i in
                     AnswerButton(
                         text: question.options[i],
+                        baseColor: quizOptionColors[i % quizOptionColors.count],
                         state: answerState(for: i),
                         onTap: { onAnswer(i) }
                     )
                 }
             }
-
-            Spacer()
+            .padding(.bottom, 8)
         }
         .padding(.horizontal, 20)
+        .padding(.top, 16)
     }
 
     private func answerState(for index: Int) -> AnswerState {
@@ -652,61 +677,59 @@ private struct QuizQuestionView: View {
 
 enum AnswerState { case idle, correct, wrong, dimmed }
 
+private struct NeoBrutalButtonStyle: ButtonStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .scaleEffect(configuration.isPressed ? 0.97 : 1.0)
+            .animation(.easeOut(duration: 0.12), value: configuration.isPressed)
+    }
+}
+
 private struct AnswerButton: View {
     let text: String
+    let baseColor: Color
     let state: AnswerState
     let onTap: () -> Void
 
-    var bgColor: Color {
-        switch state {
-        case .idle:    return Color.white.opacity(0.07)
-        case .correct: return Color.green.opacity(0.25)
-        case .wrong:   return Color.red.opacity(0.2)
-        case .dimmed:  return Color.white.opacity(0.03)
-        }
-    }
+    @State private var pulse = false
 
-    var borderColor: Color {
-        switch state {
-        case .idle:    return Color.clear
-        case .correct: return Color.green.opacity(0.6)
-        case .wrong:   return Color.red.opacity(0.5)
-        case .dimmed:  return Color.clear
-        }
-    }
-
-    var textColor: Color {
-        switch state {
-        case .idle:    return .white
-        case .correct: return Color(hex: "#4ade80")
-        case .wrong:   return Color(hex: "#f87171")
-        case .dimmed:  return Color.white.opacity(0.25)
-        }
-    }
+    private var isCorrect: Bool { state == .correct }
+    private var isDimmed: Bool { state == .wrong || state == .dimmed }
 
     var body: some View {
         Button(action: onTap) {
-            HStack {
+            HStack(spacing: 10) {
                 Text(text)
-                    .font(.body)
-                    .fontWeight(.semibold)
-                    .foregroundStyle(textColor)
+                    .font(.system(size: 17, weight: .heavy))
+                    .foregroundStyle(.black)
                     .multilineTextAlignment(.leading)
                     .fixedSize(horizontal: false, vertical: true)
-                Spacer()
-                if state == .correct {
-                    Image(systemName: "checkmark.circle.fill").foregroundStyle(Color(hex: "#4ade80"))
-                } else if state == .wrong {
-                    Image(systemName: "xmark.circle.fill").foregroundStyle(Color(hex: "#f87171"))
+                if isCorrect {
+                    Spacer(minLength: 0)
+                    Image(systemName: "checkmark.circle.fill")
+                        .font(.system(size: 20, weight: .bold))
+                        .foregroundStyle(.black)
                 }
             }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .frame(height: 72)
             .padding(.horizontal, 18)
-            .frame(minHeight: 56)
-            .background(bgColor)
-            .clipShape(RoundedRectangle(cornerRadius: 14))
-            .overlay(RoundedRectangle(cornerRadius: 14).stroke(borderColor, lineWidth: 1.5))
+            .background(isCorrect ? quizCorrectGreen : baseColor)
+            .clipShape(RoundedRectangle(cornerRadius: 16))
         }
+        .buttonStyle(NeoBrutalButtonStyle())
+        .opacity(isDimmed ? 0.4 : 1.0)
+        .scaleEffect(isCorrect && pulse ? 1.04 : 1.0)
+        .shadow(color: .black.opacity(0.6), radius: 0, x: 3, y: 3)
         .disabled(state != .idle)
+        .animation(.easeInOut(duration: 0.25), value: isDimmed)
+        .onChange(of: state) { _, newState in
+            if newState == .correct {
+                withAnimation(.easeInOut(duration: 0.45).repeatForever(autoreverses: true)) {
+                    pulse = true
+                }
+            }
+        }
     }
 }
 
@@ -721,6 +744,24 @@ private struct QuizResultView: View {
 
     private var pct: Int { score * 100 / total }
 
+    private var headline: String {
+        switch score {
+        case 5:  return "¡PERFECTO! 🏆"
+        case 4:  return "¡Casi perfecto! 🔥"
+        case 3:  return "¡Nada mal! ⚡"
+        default: return "¡Seguí practicando! 💪"
+        }
+    }
+
+    private var headlineColor: Color {
+        switch score {
+        case 5:  return Color(hex: "#F0C130")   // gold
+        case 4:  return Color(hex: "#2ECC71")   // green
+        case 3:  return .white
+        default: return Color(hex: "#8E8E93")   // gray
+        }
+    }
+
     private var tierDesc: String {
         switch score {
         case 5:    return "Existís en silencio, defendés con confianza, y de alguna forma 2,9 millones de personas te bancaron. Icónico."
@@ -732,42 +773,51 @@ private struct QuizResultView: View {
     }
 
     var body: some View {
-        VStack(spacing: 24) {
+        VStack(spacing: 0) {
             Spacer()
-            Text("RESULTADO")
-                .font(.system(size: 11, weight: .bold))
-                .kerning(3)
-                .foregroundStyle(Color.white.opacity(0.4))
 
-            Text("\(pct)%")
-                .font(.system(size: 96, weight: .black, design: .default))
-                .foregroundStyle(.white)
-                .kerning(-4)
+            // Result card
+            VStack(spacing: 16) {
+                Text(category.emoji)
+                    .font(.system(size: 48))
 
-            Text("\(score) / \(total) correctas")
-                .font(.system(size: 16, weight: .semibold))
-                .foregroundStyle(Color.white.opacity(0.5))
+                Text("\(score)/\(total)")
+                    .font(.system(size: 80, weight: .black, design: .default))
+                    .foregroundStyle(.white)
+                    .kerning(-2)
 
-            Text(category.emoji)
-                .font(.system(size: 40))
-
-            if category.id == "timpayne" {
-                Text(tierDesc)
-                    .font(.system(size: 14))
-                    .foregroundStyle(Color.white.opacity(0.55))
+                Text(headline)
+                    .font(.system(size: 28, weight: .heavy))
+                    .foregroundStyle(headlineColor)
                     .multilineTextAlignment(.center)
-                    .lineSpacing(3)
-                    .padding(.horizontal, 32)
+
+                if category.id == "timpayne" {
+                    Text(tierDesc)
+                        .font(.system(size: 14))
+                        .foregroundStyle(Color.white.opacity(0.55))
+                        .multilineTextAlignment(.center)
+                        .lineSpacing(3)
+                        .padding(.top, 4)
+                        .padding(.horizontal, 8)
+                }
             }
+            .padding(28)
+            .frame(maxWidth: .infinity)
+            .background(Color(hex: "#12121A"))
+            .clipShape(RoundedRectangle(cornerRadius: 24))
+            .overlay(
+                RoundedRectangle(cornerRadius: 24)
+                    .stroke(headlineColor.opacity(0.3), lineWidth: 1.5)
+            )
 
             Spacer()
 
-            VStack(spacing: 10) {
-                ShareLink(item: "Saqué \(pct)% en \"\(category.label)\" 🇳🇿 #NoPayneNoGain timpaynefans.com") {
+            VStack(spacing: 12) {
+                ShareLink(item: "Saqué \(score)/\(total) (\(pct)%) en \"\(category.label)\" 🇳🇿 #NoPayneNoGain timpaynefans.com") {
                     HStack {
                         Spacer()
                         Label("Compartir resultado", systemImage: "square.and.arrow.up")
-                            .font(.system(size: 15, weight: .bold))
+                            .font(.system(size: 16, weight: .bold))
                             .foregroundStyle(Color(hex: "#070A0D"))
                         Spacer()
                     }
@@ -779,30 +829,31 @@ private struct QuizResultView: View {
                 Button(action: onPlayAgain) {
                     HStack {
                         Spacer()
-                        Text("Jugar de nuevo →")
-                            .font(.system(size: 15, weight: .semibold))
+                        Text("Intentar de nuevo")
+                            .font(.system(size: 16, weight: .bold))
                             .foregroundStyle(.white)
                         Spacer()
                     }
-                    .padding(.vertical, 14)
-                    .background(Color.white.opacity(0.07))
+                    .padding(.vertical, 16)
+                    .background(Color.white.opacity(0.08))
                     .clipShape(RoundedRectangle(cornerRadius: 14))
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 14)
+                            .stroke(Color.white.opacity(0.12), lineWidth: 1)
+                    )
                 }
 
                 Button(action: onDone) {
-                    HStack {
-                        Spacer()
-                        Text("← Volver a los Quizzes")
-                            .font(.system(size: 14, weight: .medium))
-                            .foregroundStyle(Color.white.opacity(0.5))
-                        Spacer()
-                    }
-                    .padding(.vertical, 12)
+                    Text("← Volver a los Quizzes")
+                        .font(.system(size: 14, weight: .medium))
+                        .foregroundStyle(Color.white.opacity(0.5))
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 12)
                 }
             }
-            .padding(.horizontal, 20)
-            .padding(.bottom, 24)
         }
+        .padding(.horizontal, 20)
+        .padding(.bottom, 24)
     }
 }
 

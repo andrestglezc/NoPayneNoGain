@@ -12,11 +12,11 @@ struct ContentView: View {
 
     var body: some View {
         TabView {
-            Tab("Quiz", systemImage: "trophy.fill") {
-                QuizView()
-            }
-            Tab("Hype", systemImage: "flame.fill") {
+            Tab("Hype 🔥", systemImage: "flame.fill") {
                 HypeView()
+            }
+            Tab("Quiz 🧠", systemImage: "trophy.fill") {
+                QuizView()
             }
             Tab("Misiones", systemImage: "target") {
                 MisionesView()
@@ -24,7 +24,7 @@ struct ContentView: View {
             Tab("Cantos", systemImage: "music.note") {
                 CantosView()
             }
-            Tab("Perfil", systemImage: "person.fill") {
+            Tab("Perfil 👤", systemImage: "person.fill") {
                 PerfilView()
             }
         }

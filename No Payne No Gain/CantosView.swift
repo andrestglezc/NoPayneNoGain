@@ -68,14 +68,14 @@ private struct GeneratorCard: View {
 
             TextField("Tu nombre", text: $userName)
                 .padding(12)
-                .background(Color.white.opacity(0.07))
+                .background(Color(hex: "#1A1A2E"))
                 .clipShape(RoundedRectangle(cornerRadius: 10))
                 .foregroundStyle(.white)
                 .tint(Color(hex: "#F0C130"))
 
             TextField("Tu país (opcional)", text: $userCountry)
                 .padding(12)
-                .background(Color.white.opacity(0.07))
+                .background(Color(hex: "#1A1A2E"))
                 .clipShape(RoundedRectangle(cornerRadius: 10))
                 .foregroundStyle(.white)
                 .tint(Color(hex: "#F0C130"))
@@ -132,7 +132,7 @@ private struct GeneratorCard: View {
             }
         }
         .padding(18)
-        .background(Color(hex: "#1A1A2E"))
+        .background(Color(hex: "#12121A"))
         .clipShape(RoundedRectangle(cornerRadius: 16))
     }
 
@@ -151,6 +151,8 @@ private struct GeneratorCard: View {
 // MARK: - Fan Chants Section
 
 private struct FanChantsSection: View {
+    @State private var showAllCantos = false
+
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             Text("Cantos de Fans")
@@ -158,8 +160,22 @@ private struct FanChantsSection: View {
                 .foregroundStyle(.white)
                 .padding(.horizontal, 2)
 
-            ForEach(fanChants, id: \.self) { chant in
+            ForEach(fanChants.prefix(showAllCantos ? fanChants.count : 3), id: \.self) { chant in
                 ChantCard(chant: chant)
+            }
+
+            if !showAllCantos {
+                Button {
+                    withAnimation(.easeInOut(duration: 0.3)) {
+                        showAllCantos = true
+                    }
+                } label: {
+                    Text("Ver más cantos")
+                        .font(.system(size: 15, weight: .semibold))
+                        .foregroundStyle(Color(hex: "#F0C130"))
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 8)
+                }
             }
         }
     }

@@ -11,6 +11,9 @@ class AppState {
     var lastOpenDate: String = UserDefaults.standard.string(forKey: "lastOpenDate") ?? "" {
         didSet { UserDefaults.standard.set(lastOpenDate, forKey: "lastOpenDate") }
     }
+    var firstLaunchDate: String = UserDefaults.standard.string(forKey: "firstLaunchDate") ?? "" {
+        didSet { UserDefaults.standard.set(firstLaunchDate, forKey: "firstLaunchDate") }
+    }
     var paynePoints: Int = UserDefaults.standard.integer(forKey: "paynePoints") {
         didSet { UserDefaults.standard.set(paynePoints, forKey: "paynePoints") }
     }
@@ -46,6 +49,8 @@ class AppState {
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd"
         let today = formatter.string(from: Date())
+
+        if firstLaunchDate.isEmpty { firstLaunchDate = today }
 
         guard !lastOpenDate.isEmpty else {
             lastOpenDate = today

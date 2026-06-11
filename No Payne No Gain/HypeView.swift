@@ -317,6 +317,7 @@ private struct TitleSection: View {
 // MARK: - Origin Story Card
 
 private struct OriginStoryCard: View {
+    @State private var showFigurita = false
     private let story = """
 El influencer argentino El Scarso buscó en todos los planteles del World Cup al jugador menos conocido. Encontró a Tim Payne — un lateral derecho de Wellington con 4.715 seguidores en Instagram.
 
@@ -341,10 +342,60 @@ Tim le mandó un DM a El Scarso: "Me preguntaba por qué mis redes explotaban."
                 .font(.system(size: 16, weight: .semibold))
                 .italic()
                 .foregroundStyle(Color(hex: "#00A859"))
+
+            FiguritaCTABanner { showFigurita = true }
+                .padding(.top, 4)
         }
         .padding(20)
         .background(Color(hex: "#12121A"))
         .clipShape(RoundedRectangle(cornerRadius: 16))
+        .sheet(isPresented: $showFigurita) {
+            FiguritaView()
+        }
+    }
+}
+
+// MARK: - Figurita CTA (matches PerfilView)
+
+private struct FiguritaCTABanner: View {
+    let action: () -> Void
+    @State private var shimmer = false
+
+    var body: some View {
+        Button(action: action) {
+            HStack(spacing: 12) {
+                Text("🃏 Crea tu figurita personalizada")
+                    .font(.system(size: 16, weight: .bold))
+                    .foregroundStyle(.white)
+                    .multilineTextAlignment(.leading)
+                    .fixedSize(horizontal: false, vertical: true)
+                Spacer(minLength: 8)
+                ZStack {
+                    Circle().fill(Color(hex: "#070A0D").opacity(0.85))
+                    Text("→")
+                        .font(.system(size: 20, weight: .bold))
+                        .foregroundStyle(Color(hex: "#F0C130"))
+                }
+                .frame(width: 38, height: 38)
+            }
+            .padding(.horizontal, 20)
+            .frame(height: 80)
+            .frame(maxWidth: .infinity)
+            .background(
+                LinearGradient(
+                    colors: [Color(hex: "#F0C130"), Color(hex: "#C49A1A"), Color(hex: "#F0C130")],
+                    startPoint: shimmer ? UnitPoint(x: 0.6, y: 0.0) : UnitPoint(x: -0.6, y: 0.5),
+                    endPoint:   shimmer ? UnitPoint(x: 1.6, y: 1.0) : UnitPoint(x: 0.6, y: 0.5)
+                )
+            )
+            .clipShape(RoundedRectangle(cornerRadius: 16))
+        }
+        .buttonStyle(PressScaleButtonStyle())
+        .onAppear {
+            withAnimation(.linear(duration: 2.5).repeatForever(autoreverses: true)) {
+                shimmer = true
+            }
+        }
     }
 }
 
@@ -523,19 +574,6 @@ final class MotionManager {
     deinit { cm.stopDeviceMotionUpdates() }
 }
 
-// MARK: - Color helper
-
-extension Color {
-    init(hex: String) {
-        let h = hex.trimmingCharacters(in: CharacterSet(charactersIn: "#"))
-        var rgb: UInt64 = 0
-        Scanner(string: h).scanHexInt64(&rgb)
-        let r = Double((rgb >> 16) & 0xFF) / 255
-        let g = Double((rgb >> 8)  & 0xFF) / 255
-        let b = Double(rgb         & 0xFF) / 255
-        self.init(red: r, green: g, blue: b)
-    }
-}
 
 #Preview {
     HypeView()
