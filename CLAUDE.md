@@ -18,7 +18,7 @@
 
 ## TODO
 - (all four prior TODOs done: Quiz redesign, Figurita, Perfil redesign, app icon)
-- Commit the Figurita + Perfil + Quiz/Cantos work (still uncommitted as of June 11)
+- All work committed + pushed to GitHub as of June 11
 - QA full app on device before June 16
 
 ## Key technical notes
@@ -27,3 +27,4 @@
 - Bundle ID: com.nopayne.nogain, Team 7YH8CW7T2X
 - ascAppId: 6778185257 (App Store Connect, listing created)
 - Xcode 26.5, iOS 26 target, iPhone 13 Pro test device
+- Git remote: origin → https://github.com/andrestglezc/NoPayneNoGain.git (main tracks origin/main)
