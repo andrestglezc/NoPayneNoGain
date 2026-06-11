@@ -169,20 +169,23 @@ private struct FanIdentityCard: View {
         let rank = fanRank(for: appState.paynePoints)
 
         VStack(spacing: 16) {
-            Text(fanNumberText)
-                .font(.system(size: 12, weight: .semibold))
-                .kerning(1.5)
-                .foregroundStyle(Color.white.opacity(0.35))
+            VStack(spacing: 6) {
+                Text(fanNumberText)
+                    .font(.system(size: 34, weight: .black))
+                    .monospacedDigit()
+                    .foregroundStyle(.white)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.7)
 
-            VStack(spacing: 4) {
-                HStack(spacing: 8) {
+                HStack(spacing: 6) {
                     if !rank.emoji.isEmpty {
-                        Text(rank.emoji).font(.system(size: 30))
+                        Text(rank.emoji).font(.system(size: 15))
                     }
-                    Text(rank.title)
-                        .font(.system(size: 34, weight: .black))
-                        .foregroundStyle(rank.color)
+                    (Text("Rango: ").foregroundStyle(Color.white.opacity(0.45))
+                     + Text(rank.title).foregroundStyle(rank.color))
+                        .font(.system(size: 14, weight: .semibold))
                 }
+
                 Text("El Ejército de Tim Payne")
                     .font(.system(size: 13))
                     .foregroundStyle(Color.white.opacity(0.4))
@@ -255,7 +258,7 @@ private struct BadgesCollection: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("Colección de Insignias")
+            Text("Logros 🏆")
                 .font(.system(size: 20, weight: .bold))
                 .foregroundStyle(.white)
             Text("\(unlockedSet.count) de 8 desbloqueadas")
