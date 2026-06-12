@@ -67,8 +67,22 @@ class AppState {
     var fanName: String = UserDefaults.standard.string(forKey: "fanName") ?? "" {
         didSet { UserDefaults.standard.set(fanName, forKey: "fanName") }
     }
+    var lastMissionDate: Date = UserDefaults.standard.object(forKey: "lastMissionDate") as? Date ?? .distantPast {
+        didSet { UserDefaults.standard.set(lastMissionDate, forKey: "lastMissionDate") }
+    }
+
+    init() {
+        resetMissionsIfNeeded()
+    }
+
+    func resetMissionsIfNeeded() {
+        guard !Calendar.current.isDateInToday(lastMissionDate) else { return }
+        missionsCompleted = 0
+        lastMissionDate = Date()
+    }
 
     func markMissionCompleted(_ id: Int) {
+        resetMissionsIfNeeded()
         guard (missionsCompleted >> id) & 1 == 0 else { return }
         missionsCompleted |= (1 << id)
         if let mission = dailyMissions.first(where: { $0.id == id }) {
