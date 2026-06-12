@@ -14,9 +14,7 @@ struct QuizCategory: Identifiable, Hashable {
     let label: String
     let subtitle: String
     let questions: [QuizQuestion]
-    var isFeatured: Bool = false
-    var gradientStart: Color = Color(hex: "#1A1A2E")
-    var gradientEnd: Color   = Color(hex: "#0D0D1A")
+    var cardColor: Color = Color(hex: "#F0C130")
 
     func hash(into hasher: inout Hasher) { hasher.combine(id) }
     static func == (lhs: QuizCategory, rhs: QuizCategory) -> Bool { lhs.id == rhs.id }
@@ -238,13 +236,13 @@ private let footballIQQuestions: [QuizQuestion] = [
 // MARK: - Category list
 
 let quizCategories: [QuizCategory] = [
-    QuizCategory(id: "timpayne",   emoji: "🇳🇿", label: "¿Sos del Ejército?",     subtitle: "35 preguntas · Tim, El Scarso y la leyenda", questions: timPayneQuestions,   isFeatured: true, gradientStart: Color(hex: "#F0C130"), gradientEnd: Color(hex: "#E07B00")),
-    QuizCategory(id: "worldcup",   emoji: "⚽", label: "Mundial 2026",             subtitle: "Grupos, partidos y momentos de Tim",          questions: worldcupQuestions,   gradientStart: Color(hex: "#C0392B"), gradientEnd: Color(hex: "#7B0000")),
-    QuizCategory(id: "deepLore",   emoji: "🇳🇿", label: "Lore de Tim Payne",       subtitle: "El Scarso, el origen, la leyenda",             questions: deepLoreQuestions,   gradientStart: Color(hex: "#00A859"), gradientEnd: Color(hex: "#005C30")),
-    QuizCategory(id: "boots",      emoji: "👟", label: "¿Qué botín es?",           subtitle: "Total 90, Predator, Tiempo y más",             questions: bootsQuestions,      gradientStart: Color(hex: "#2980B9"), gradientEnd: Color(hex: "#1A3A5C")),
-    QuizCategory(id: "goats",      emoji: "🏆", label: "Los Mejores del Mundo",    subtitle: "Cracks, Balón de Oro y debates",               questions: goatsQuestions,      gradientStart: Color(hex: "#8E44AD"), gradientEnd: Color(hex: "#4A0E6E")),
-    QuizCategory(id: "balls",      emoji: "🔵", label: "¿Qué pelota es?",          subtitle: "Las pelotas del Mundial en la historia",       questions: ballsQuestions,      gradientStart: Color(hex: "#16A085"), gradientEnd: Color(hex: "#0A4D40")),
-    QuizCategory(id: "footballiq", emoji: "🧠", label: "Fútbol IQ",                subtitle: "Reglas, historia y cultura futbolera",         questions: footballIQQuestions,  gradientStart: Color(hex: "#E67E22"), gradientEnd: Color(hex: "#7D3C00")),
+    QuizCategory(id: "timpayne",   emoji: "🇳🇿", label: "¿Sos del Ejército?",     subtitle: "35 preguntas · Tim, El Scarso y la leyenda", questions: timPayneQuestions,   cardColor: Color(hex: "#F0C130")),
+    QuizCategory(id: "worldcup",   emoji: "⚽", label: "Mundial 2026",             subtitle: "Grupos, partidos y momentos de Tim",          questions: worldcupQuestions,   cardColor: Color(hex: "#F0742F")),
+    QuizCategory(id: "deepLore",   emoji: "🇳🇿", label: "Lore de Tim Payne",       subtitle: "El Scarso, el origen, la leyenda",             questions: deepLoreQuestions,   cardColor: Color(hex: "#8B5CF6")),
+    QuizCategory(id: "boots",      emoji: "👟", label: "¿Qué botín es?",           subtitle: "Total 90, Predator, Tiempo y más",             questions: bootsQuestions,      cardColor: Color(hex: "#34D399")),
+    QuizCategory(id: "goats",      emoji: "🏆", label: "Los Mejores del Mundo",    subtitle: "Cracks, Balón de Oro y debates",               questions: goatsQuestions,      cardColor: Color(hex: "#EC4899")),
+    QuizCategory(id: "balls",      emoji: "🔵", label: "¿Qué pelota es?",          subtitle: "Las pelotas del Mundial en la historia",       questions: ballsQuestions,      cardColor: Color(hex: "#3B82F6")),
+    QuizCategory(id: "footballiq", emoji: "🧠", label: "Fútbol IQ",                subtitle: "Reglas, historia y cultura futbolera",         questions: footballIQQuestions,  cardColor: Color(hex: "#EF4444")),
 ]
 
 // MARK: - QuizView (root)
@@ -258,17 +256,10 @@ struct QuizView: View {
             ZStack {
                 Color(hex: "#070A0D").ignoresSafeArea()
                 ScrollView {
-                    VStack(spacing: 16) {
-                        // Featured card — full width
-                        FeaturedCategoryCard(category: quizCategories[0]) {
-                            path.append(quizCategories[0])
-                        }
-                        // 2-column grid for remaining categories
-                        LazyVGrid(columns: [GridItem(.flexible(), spacing: 12), GridItem(.flexible(), spacing: 12)], spacing: 12) {
-                            ForEach(quizCategories.dropFirst()) { cat in
-                                SmallCategoryCard(category: cat) {
-                                    path.append(cat)
-                                }
+                    VStack(spacing: 12) {
+                        ForEach(quizCategories) { cat in
+                            CategoryCard(category: cat) {
+                                path.append(cat)
                             }
                         }
                     }
@@ -287,102 +278,36 @@ struct QuizView: View {
     }
 }
 
-// MARK: - Category Cards
+// MARK: - Category Card
 
-private struct FeaturedCategoryCard: View {
+private struct CategoryCard: View {
     let category: QuizCategory
     let onTap: () -> Void
 
     var body: some View {
         Button(action: onTap) {
-            ZStack {
-                LinearGradient(
-                    colors: [category.gradientStart, category.gradientEnd],
-                    startPoint: .topLeading, endPoint: .bottomTrailing
-                )
-                // subtle dark vignette so text stays readable
-                LinearGradient(
-                    colors: [Color.black.opacity(0.25), Color.black.opacity(0.5)],
-                    startPoint: .top, endPoint: .bottom
-                )
-                VStack(alignment: .leading, spacing: 10) {
-                    Text("DESTACADO")
-                        .font(.system(size: 10, weight: .bold))
-                        .kerning(2)
-                        .foregroundStyle(Color.white)
-                        .padding(.horizontal, 10)
-                        .padding(.vertical, 4)
-                        .background(Color.white.opacity(0.18))
-                        .clipShape(Capsule())
-                        .overlay(Capsule().stroke(Color.white.opacity(0.4), lineWidth: 1))
-
+            HStack(alignment: .top, spacing: 12) {
+                VStack(alignment: .leading, spacing: 6) {
                     Text(category.label)
-                        .font(.system(size: 22, weight: .black))
-                        .foregroundStyle(.white)
-
-                    Text(category.subtitle)
-                        .font(.system(size: 14))
-                        .foregroundStyle(Color.white.opacity(0.75))
-
-                    HStack {
-                        Spacer()
-                        Text("Empezar Quiz →")
-                            .font(.system(size: 15, weight: .bold))
-                            .foregroundStyle(Color.black)
-                            .padding(.horizontal, 20)
-                            .padding(.vertical, 12)
-                            .background(Color.white)
-                            .clipShape(RoundedRectangle(cornerRadius: 12))
-                        Spacer()
-                    }
-                    .padding(.top, 4)
-                }
-                .padding(24)
-            }
-        }
-        .clipShape(RoundedRectangle(cornerRadius: 20))
-        .frame(minHeight: 200)
-    }
-}
-
-private struct SmallCategoryCard: View {
-    let category: QuizCategory
-    let onTap: () -> Void
-
-    var body: some View {
-        Button(action: onTap) {
-            ZStack(alignment: .topLeading) {
-                LinearGradient(
-                    colors: [category.gradientStart, category.gradientEnd],
-                    startPoint: .topLeading, endPoint: .bottomTrailing
-                )
-                LinearGradient(
-                    colors: [Color.black.opacity(0.15), Color.black.opacity(0.45)],
-                    startPoint: .top, endPoint: .bottom
-                )
-                VStack(alignment: .leading, spacing: 8) {
-                    Text(category.emoji)
-                        .font(.system(size: 28))
-                    Text(category.label)
-                        .font(.system(size: 15, weight: .bold))
-                        .foregroundStyle(.white)
+                        .font(.system(size: 26, weight: .black))
+                        .foregroundStyle(.black)
+                        .multilineTextAlignment(.leading)
                         .lineLimit(2)
                         .fixedSize(horizontal: false, vertical: true)
-                    Text(category.subtitle)
-                        .font(.system(size: 11))
-                        .foregroundStyle(Color.white.opacity(0.7))
-                        .lineLimit(2)
-                        .fixedSize(horizontal: false, vertical: true)
-                    Spacer()
-                    Text("→")
-                        .font(.system(size: 18, weight: .bold))
-                        .foregroundStyle(Color.white.opacity(0.9))
+                    Text("\(category.questions.count) preguntas")
+                        .font(.system(size: 13, weight: .semibold))
+                        .foregroundStyle(.black.opacity(0.6))
                 }
-                .padding(16)
+                Spacer(minLength: 8)
+                Text(category.emoji)
+                    .font(.system(size: 34))
             }
-            .frame(maxWidth: .infinity, minHeight: 160, alignment: .topLeading)
-            .clipShape(RoundedRectangle(cornerRadius: 16))
+            .padding(24)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .background(category.cardColor)
+            .clipShape(RoundedRectangle(cornerRadius: 24))
         }
+        .buttonStyle(NeoBrutalButtonStyle())
     }
 }
 
@@ -579,6 +504,7 @@ struct QuizGameView: View {
                     selectedAnswer = nil
                 } else {
                     if score > appState.quizBestScore { appState.quizBestScore = score }
+                    appState.markMissionCompleted(0)
                     showResult = true
                 }
             }
@@ -742,6 +668,8 @@ private struct QuizResultView: View {
     let onPlayAgain: () -> Void
     let onDone: () -> Void
 
+    @Environment(AppState.self) private var appState
+
     private var pct: Int { score * 100 / total }
 
     private var headline: String {
@@ -825,6 +753,9 @@ private struct QuizResultView: View {
                     .background(Color(hex: "#F0C130"))
                     .clipShape(RoundedRectangle(cornerRadius: 14))
                 }
+                .simultaneousGesture(TapGesture().onEnded {
+                    appState.markMissionCompleted(3)
+                })
 
                 Button(action: onPlayAgain) {
                     HStack {

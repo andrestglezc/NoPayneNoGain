@@ -1,5 +1,22 @@
 import SwiftUI
 
+// MARK: - Daily missions (earned via real in-app events, never tapped)
+
+struct DailyMission: Identifiable {
+    let id: Int          // bit index in AppState.missionsCompleted
+    let emoji: String
+    let title: String
+    let description: String
+    let points: Int
+}
+
+let dailyMissions: [DailyMission] = [
+    DailyMission(id: 0, emoji: "🧠", title: "Cerebrito",       description: "Completá un quiz",           points: 25),
+    DailyMission(id: 1, emoji: "🎯", title: "Visionario",      description: "Confirmá una predicción",    points: 25),
+    DailyMission(id: 2, emoji: "🎵", title: "Ensayo del Coro", description: "Generá tu canto",            points: 15),
+    DailyMission(id: 3, emoji: "📤", title: "Corre la Voz",    description: "Compartí algo del ejército", points: 25),
+]
+
 @Observable
 class AppState {
     var totalTaps: Int = UserDefaults.standard.integer(forKey: "totalTaps") {
@@ -43,6 +60,20 @@ class AppState {
     }
     var predictionScore: Int = UserDefaults.standard.integer(forKey: "predictionScore") {
         didSet { UserDefaults.standard.set(predictionScore, forKey: "predictionScore") }
+    }
+    var hasSeenOnboarding: Bool = UserDefaults.standard.bool(forKey: "hasSeenOnboarding") {
+        didSet { UserDefaults.standard.set(hasSeenOnboarding, forKey: "hasSeenOnboarding") }
+    }
+    var fanName: String = UserDefaults.standard.string(forKey: "fanName") ?? "" {
+        didSet { UserDefaults.standard.set(fanName, forKey: "fanName") }
+    }
+
+    func markMissionCompleted(_ id: Int) {
+        guard (missionsCompleted >> id) & 1 == 0 else { return }
+        missionsCompleted |= (1 << id)
+        if let mission = dailyMissions.first(where: { $0.id == id }) {
+            paynePoints += mission.points
+        }
     }
 
     func checkAndUpdateStreak() {

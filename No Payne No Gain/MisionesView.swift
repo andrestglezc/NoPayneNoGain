@@ -2,20 +2,6 @@ import SwiftUI
 
 // MARK: - Models
 
-private struct Mission: Identifiable {
-    let id: Int
-    let emoji: String
-    let title: String
-    let description: String
-    let points: Int
-}
-
-private let allMissions: [Mission] = [
-    Mission(id: 0, emoji: "📤", title: "Corre la Voz",    description: "Compartí un canto del ejército", points: 25),
-    Mission(id: 1, emoji: "🎵", title: "Ensayo del Coro", description: "Explorá 3 cantos de fans",        points: 15),
-    Mission(id: 2, emoji: "🔥", title: "Fan Constante",   description: "Mantené una racha de 3 días",     points: 50),
-]
-
 private struct MatchInfo: Identifiable {
     let id: Int
     let flagOpponent: String
@@ -114,6 +100,7 @@ private struct PredictionsSection: View {
         case 3: appState.predictionsMatch3 = str
         default: break
         }
+        appState.markMissionCompleted(1)
         appState.predictionScore = [
             appState.predictionsMatch1,
             appState.predictionsMatch2,
@@ -340,6 +327,9 @@ private struct PredictoresCard: View {
                     .background(Color(hex: "#F0C130"))
                     .clipShape(RoundedRectangle(cornerRadius: 10))
             }
+            .simultaneousGesture(TapGesture().onEnded {
+                appState.markMissionCompleted(3)
+            })
         }
         .padding(18)
         .background(Color(hex: "#12121A"))
@@ -358,39 +348,24 @@ private struct DailyMissionsSection: View {
                 Text("Misiones Diarias")
                     .font(.system(size: 22, weight: .bold))
                     .foregroundStyle(.white)
-                Text("\(completedCount)/3 completadas · \(earnedPoints) Payne Points")
+                Text("\(completedCount)/\(dailyMissions.count) completadas · \(earnedPoints) Payne Points")
                     .font(.system(size: 13))
                     .foregroundStyle(Color.white.opacity(0.5))
             }
 
             StreakBanner(streak: appState.currentStreak)
 
-            ForEach(allMissions) { mission in
-                MissionCard(
-                    mission: mission,
-                    isDone: isCompleted(mission),
-                    onComplete: { complete(mission) }
-                )
-                .sensoryFeedback(.success, trigger: isCompleted(mission))
+            ForEach(dailyMissions) { mission in
+                MissionCard(mission: mission, isDone: isCompleted(mission))
+                    .sensoryFeedback(.success, trigger: isCompleted(mission))
             }
         }
-        .onAppear { autoCheck() }
     }
 
-    private var completedCount: Int { allMissions.filter { isCompleted($0) }.count }
-    private var earnedPoints: Int   { allMissions.filter { isCompleted($0) }.map { $0.points }.reduce(0, +) }
+    private var completedCount: Int { dailyMissions.filter { isCompleted($0) }.count }
+    private var earnedPoints: Int   { dailyMissions.filter { isCompleted($0) }.map { $0.points }.reduce(0, +) }
 
-    private func isCompleted(_ m: Mission) -> Bool { (appState.missionsCompleted >> m.id) & 1 == 1 }
-
-    private func complete(_ m: Mission) {
-        guard !isCompleted(m) else { return }
-        appState.missionsCompleted |= (1 << m.id)
-        appState.paynePoints += m.points
-    }
-
-    private func autoCheck() {
-        if appState.currentStreak >= 3 { complete(allMissions[2]) }
-    }
+    private func isCompleted(_ m: DailyMission) -> Bool { (appState.missionsCompleted >> m.id) & 1 == 1 }
 }
 
 // MARK: - Streak Banner
@@ -436,9 +411,8 @@ private struct StreakBanner: View {
 // MARK: - Mission Card
 
 private struct MissionCard: View {
-    let mission: Mission
+    let mission: DailyMission
     let isDone: Bool
-    let onComplete: () -> Void
 
     var body: some View {
         VStack(spacing: 12) {
@@ -482,14 +456,12 @@ private struct MissionCard: View {
                     Spacer()
                 }
             } else {
-                Button(action: onComplete) {
-                    Text("Completar misión")
-                        .font(.system(size: 14, weight: .semibold))
-                        .foregroundStyle(Color(hex: "#070A0D"))
-                        .frame(maxWidth: .infinity)
-                        .padding(.vertical, 11)
-                        .background(Color(hex: "#F0C130"))
-                        .clipShape(RoundedRectangle(cornerRadius: 10))
+                HStack {
+                    Image(systemName: "circle").foregroundStyle(Color.white.opacity(0.35))
+                    Text("Pendiente")
+                        .font(.system(size: 12, weight: .semibold))
+                        .foregroundStyle(Color.white.opacity(0.35))
+                    Spacer()
                 }
             }
         }

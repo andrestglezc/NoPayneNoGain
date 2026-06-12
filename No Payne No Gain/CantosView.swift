@@ -56,6 +56,7 @@ struct CantosView: View {
 // MARK: - Generator Card
 
 private struct GeneratorCard: View {
+    @Environment(AppState.self) private var appState
     @Binding var userName: String
     @Binding var userCountry: String
     @Binding var generatedChant: String
@@ -87,14 +88,18 @@ private struct GeneratorCard: View {
                     Spacer()
                     Text("Generar Canto 🎶")
                         .font(.system(size: 15, weight: .bold))
-                        .foregroundStyle(Color(hex: "#070A0D"))
+                        .foregroundStyle(
+                            Color(hex: "#070A0D").opacity(
+                                userName.trimmingCharacters(in: .whitespaces).isEmpty ? 0.5 : 1.0
+                            )
+                        )
                     Spacer()
                 }
                 .padding(.vertical, 14)
                 .background(
-                    userName.trimmingCharacters(in: .whitespaces).isEmpty
-                        ? Color.white.opacity(0.2)
-                        : Color(hex: "#F0C130")
+                    Color(hex: "#F0C130").opacity(
+                        userName.trimmingCharacters(in: .whitespaces).isEmpty ? 0.4 : 1.0
+                    )
                 )
                 .clipShape(RoundedRectangle(cornerRadius: 12))
             }
@@ -121,6 +126,10 @@ private struct GeneratorCard: View {
                         .background(Color(hex: "#F0C130").opacity(0.12))
                         .clipShape(RoundedRectangle(cornerRadius: 10))
                     }
+                    .simultaneousGesture(TapGesture().onEnded {
+                        appState.markMissionCompleted(3)
+                        appState.chantsShared += 1
+                    })
                 }
                 .padding(14)
                 .background(Color(hex: "#F0C130").opacity(0.06))
@@ -145,6 +154,8 @@ private struct GeneratorCard: View {
         generatedChant = template
             .replacingOccurrences(of: "{name}",    with: name)
             .replacingOccurrences(of: "{country}", with: country)
+        appState.markMissionCompleted(2)
+        appState.chantsGenerated += 1
     }
 }
 
@@ -182,6 +193,7 @@ private struct FanChantsSection: View {
 }
 
 private struct ChantCard: View {
+    @Environment(AppState.self) private var appState
     let chant: String
 
     var body: some View {
@@ -209,6 +221,10 @@ private struct ChantCard: View {
                         .font(.system(size: 11, weight: .semibold))
                         .foregroundStyle(Color(hex: "#F0C130"))
                 }
+                .simultaneousGesture(TapGesture().onEnded {
+                    appState.markMissionCompleted(3)
+                    appState.chantsShared += 1
+                })
             }
         }
         .padding(16)
@@ -219,4 +235,5 @@ private struct ChantCard: View {
 
 #Preview {
     CantosView()
+        .environment(AppState())
 }

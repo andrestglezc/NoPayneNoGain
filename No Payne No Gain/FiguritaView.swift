@@ -54,9 +54,15 @@ struct FiguritaView: View {
     @State private var userImage:     UIImage?          = nil
     @State private var showShareSheet = false
     @State private var renderedImage: UIImage?          = nil
-    @State private var isRendering = false
+    @State private var isRendering      = false
+    @State private var showDateSheet    = false
+    @State private var showHeightSheet  = false
+    @State private var showWeightSheet  = false
+    @State private var pendingBirthDate: Date = Date()
+    @State private var pendingHeightCm: Int   = 175
+    @State private var pendingWeightKg: Int   = 75
 
-    private enum InputField { case name, country, height, weight }
+    private enum InputField { case name, country }
     @FocusState private var focusedField: InputField?
 
     // ISO ⇆ display date formatters
@@ -88,7 +94,12 @@ struct FiguritaView: View {
     }
     private var heightDisplay: String {
         let v = heightRaw.trimmingCharacters(in: .whitespaces)
-        return v.isEmpty ? "" : "\(v.replacingOccurrences(of: ".", with: ",")) m"
+        guard !v.isEmpty else { return "" }
+        if let cm = Int(v), cm >= 100, cm <= 250 {
+            return String(format: "%.2f m", Double(cm) / 100.0)
+                .replacingOccurrences(of: ".", with: ",")
+        }
+        return "\(v.replacingOccurrences(of: ".", with: ",")) m"
     }
     private var weightDisplay: String {
         let v = weightRaw.trimmingCharacters(in: .whitespaces)
@@ -160,6 +171,109 @@ struct FiguritaView: View {
                     ])
                 }
             }
+            .sheet(isPresented: $showDateSheet) {
+                NavigationStack {
+                    ZStack {
+                        Color(hex: "#070A0D").ignoresSafeArea()
+                        DatePicker("", selection: $pendingBirthDate,
+                                   in: ...Date(), displayedComponents: .date)
+                            .datePickerStyle(.wheel)
+                            .labelsHidden()
+                            .environment(\.locale, Locale(identifier: "es"))
+                            .tint(Color(hex: "#F0C130"))
+                    }
+                    .navigationTitle("Fecha de nacimiento")
+                    .navigationBarTitleDisplayMode(.inline)
+                    .toolbarColorScheme(.dark, for: .navigationBar)
+                    .toolbar {
+                        ToolbarItem(placement: .cancellationAction) {
+                            Button("Cancelar") { showDateSheet = false }
+                                .foregroundStyle(.white)
+                        }
+                        ToolbarItem(placement: .confirmationAction) {
+                            Button("Guardar") {
+                                birthDateISO = Self.isoFormatter.string(from: pendingBirthDate)
+                                showDateSheet = false
+                            }
+                            .fontWeight(.bold)
+                            .foregroundStyle(Color(hex: "#F0C130"))
+                        }
+                    }
+                }
+                .presentationDetents([.medium])
+                .presentationDragIndicator(.visible)
+                .preferredColorScheme(.dark)
+            }
+            .sheet(isPresented: $showHeightSheet) {
+                NavigationStack {
+                    ZStack {
+                        Color(hex: "#070A0D").ignoresSafeArea()
+                        Picker("Altura", selection: $pendingHeightCm) {
+                            ForEach(140...220, id: \.self) { cm in
+                                Text(String(format: "%.2f m", Double(cm) / 100.0)
+                                    .replacingOccurrences(of: ".", with: ","))
+                                    .tag(cm)
+                            }
+                        }
+                        .pickerStyle(.wheel)
+                        .labelsHidden()
+                    }
+                    .navigationTitle("Altura")
+                    .navigationBarTitleDisplayMode(.inline)
+                    .toolbarColorScheme(.dark, for: .navigationBar)
+                    .toolbar {
+                        ToolbarItem(placement: .cancellationAction) {
+                            Button("Cancelar") { showHeightSheet = false }
+                                .foregroundStyle(.white)
+                        }
+                        ToolbarItem(placement: .confirmationAction) {
+                            Button("Guardar") {
+                                heightRaw = "\(pendingHeightCm)"
+                                showHeightSheet = false
+                            }
+                            .fontWeight(.bold)
+                            .foregroundStyle(Color(hex: "#F0C130"))
+                        }
+                    }
+                }
+                .presentationDetents([.medium])
+                .presentationDragIndicator(.visible)
+                .preferredColorScheme(.dark)
+            }
+            .sheet(isPresented: $showWeightSheet) {
+                NavigationStack {
+                    ZStack {
+                        Color(hex: "#070A0D").ignoresSafeArea()
+                        Picker("Peso", selection: $pendingWeightKg) {
+                            ForEach(40...150, id: \.self) { kg in
+                                Text("\(kg) kg").tag(kg)
+                            }
+                        }
+                        .pickerStyle(.wheel)
+                        .labelsHidden()
+                    }
+                    .navigationTitle("Peso")
+                    .navigationBarTitleDisplayMode(.inline)
+                    .toolbarColorScheme(.dark, for: .navigationBar)
+                    .toolbar {
+                        ToolbarItem(placement: .cancellationAction) {
+                            Button("Cancelar") { showWeightSheet = false }
+                                .foregroundStyle(.white)
+                        }
+                        ToolbarItem(placement: .confirmationAction) {
+                            Button("Guardar") {
+                                weightRaw = "\(pendingWeightKg)"
+                                showWeightSheet = false
+                            }
+                            .fontWeight(.bold)
+                            .foregroundStyle(Color(hex: "#F0C130"))
+                        }
+                    }
+                }
+                .presentationDetents([.medium])
+                .presentationDragIndicator(.visible)
+                .preferredColorScheme(.dark)
+            }
         }
     }
 
@@ -196,58 +310,72 @@ struct FiguritaView: View {
             .background(Color(hex: "#1A1A2E"))
             .clipShape(RoundedRectangle(cornerRadius: 12))
 
-            // Birth date — native iOS roller via compact DatePicker
-            HStack(spacing: 10) {
-                Image(systemName: "calendar")
-                    .foregroundStyle(Color.white.opacity(0.35))
-                    .frame(width: 18)
-                Text("Fecha de nacimiento")
-                    .font(.system(size: 15))
-                    .foregroundStyle(birthDateISO.isEmpty ? Color.white.opacity(0.35) : .white)
-                Spacer()
-                DatePicker("", selection: birthDateBinding, displayedComponents: .date)
-                    .labelsHidden()
-                    .datePickerStyle(.compact)
-                    .tint(Color(hex: "#F0C130"))
-                    .environment(\.colorScheme, .dark)
+            // Birth date — tappable row → wheel picker sheet
+            Button {
+                pendingBirthDate = Self.isoFormatter.date(from: birthDateISO) ?? Self.defaultBirthDate
+                showDateSheet = true
+            } label: {
+                HStack(spacing: 10) {
+                    Image(systemName: "calendar")
+                        .foregroundStyle(Color.white.opacity(0.35))
+                        .frame(width: 18)
+                    Text("Fecha de nacimiento")
+                        .font(.system(size: 15))
+                        .foregroundStyle(birthDateISO.isEmpty ? Color.white.opacity(0.35) : .white)
+                    Spacer()
+                    if !birthDateISO.isEmpty {
+                        Text(birthDateDisplay)
+                            .font(.system(size: 14))
+                            .foregroundStyle(Color(hex: "#F0C130"))
+                    } else {
+                        Image(systemName: "chevron.right")
+                            .font(.system(size: 12))
+                            .foregroundStyle(Color.white.opacity(0.3))
+                    }
+                }
+                .padding(.horizontal, 16)
+                .padding(.vertical, 14)
+                .background(Color(hex: "#1A1A2E"))
+                .clipShape(RoundedRectangle(cornerRadius: 12))
             }
-            .padding(.horizontal, 16)
-            .padding(.vertical, 9)
-            .background(Color(hex: "#1A1A2E"))
-            .clipShape(RoundedRectangle(cornerRadius: 12))
+            .buttonStyle(.plain)
 
-            // Height + weight — numeric fields with suffix labels
+            // Height + weight — wheel pickers via sheets
             HStack(spacing: 10) {
-                suffixField(icon: "ruler", placeholder: "1,87", text: $heightRaw,
-                            suffix: "m", keyboard: .decimalPad, field: .height)
-                suffixField(icon: "scalemass.fill", placeholder: "83", text: $weightRaw,
-                            suffix: "kg", keyboard: .numberPad, field: .weight)
+                pickerTapRow(icon: "ruler",
+                             display: heightRaw.isEmpty ? "— m" : heightDisplay) {
+                    pendingHeightCm = Int(heightRaw) ?? 175
+                    showHeightSheet = true
+                }
+                pickerTapRow(icon: "scalemass.fill",
+                             display: weightRaw.isEmpty ? "— kg" : weightDisplay) {
+                    pendingWeightKg = Int(weightRaw) ?? 75
+                    showWeightSheet = true
+                }
             }
         }
     }
 
-    private func suffixField(
-        icon: String, placeholder: String, text: Binding<String>,
-        suffix: String, keyboard: UIKeyboardType, field: InputField
-    ) -> some View {
-        HStack(spacing: 7) {
-            Image(systemName: icon)
-                .font(.system(size: 12))
-                .foregroundStyle(Color.white.opacity(0.35))
-            TextField(placeholder, text: text)
-                .font(.system(size: 14))
-                .foregroundStyle(.white)
-                .tint(Color(hex: "#F0C130"))
-                .keyboardType(keyboard)
-                .focused($focusedField, equals: field)
-            Text(suffix)
-                .font(.system(size: 13, weight: .semibold))
-                .foregroundStyle(Color.white.opacity(0.4))
+    private func pickerTapRow(icon: String, display: String, action: @escaping () -> Void) -> some View {
+        Button(action: action) {
+            HStack(spacing: 7) {
+                Image(systemName: icon)
+                    .font(.system(size: 12))
+                    .foregroundStyle(Color.white.opacity(0.35))
+                Text(display)
+                    .font(.system(size: 14))
+                    .foregroundStyle(.white)
+                Spacer()
+                Image(systemName: "chevron.right")
+                    .font(.system(size: 11))
+                    .foregroundStyle(Color.white.opacity(0.3))
+            }
+            .padding(.horizontal, 12)
+            .padding(.vertical, 13)
+            .background(Color(hex: "#1A1A2E"))
+            .clipShape(RoundedRectangle(cornerRadius: 12))
         }
-        .padding(.horizontal, 12)
-        .padding(.vertical, 13)
-        .background(Color(hex: "#1A1A2E"))
-        .clipShape(RoundedRectangle(cornerRadius: 12))
+        .buttonStyle(.plain)
     }
 
     // MARK: Card + Picker

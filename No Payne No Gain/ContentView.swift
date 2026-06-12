@@ -11,25 +11,30 @@ struct ContentView: View {
     @State private var appState = AppState()
 
     var body: some View {
-        TabView {
-            Tab("Hype", systemImage: "flame.fill") {
-                HypeView()
+        if appState.hasSeenOnboarding {
+            TabView {
+                Tab("Hype", systemImage: "flame.fill") {
+                    HypeView()
+                }
+                Tab("Quiz", systemImage: "trophy.fill") {
+                    QuizView()
+                }
+                Tab("Misiones", systemImage: "target") {
+                    MisionesView()
+                }
+                Tab("Cantos", systemImage: "music.note") {
+                    CantosView()
+                }
+                Tab("Perfil", systemImage: "person.fill") {
+                    PerfilView()
+                }
             }
-            Tab("Quiz", systemImage: "trophy.fill") {
-                QuizView()
-            }
-            Tab("Misiones", systemImage: "target") {
-                MisionesView()
-            }
-            Tab("Cantos", systemImage: "music.note") {
-                CantosView()
-            }
-            Tab("Perfil", systemImage: "person.fill") {
-                PerfilView()
-            }
+            .environment(appState)
+            .onAppear { appState.checkAndUpdateStreak() }
+        } else {
+            OnboardingView()
+                .environment(appState)
         }
-        .environment(appState)
-        .onAppear { appState.checkAndUpdateStreak() }
     }
 }
 

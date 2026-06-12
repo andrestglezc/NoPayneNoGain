@@ -60,7 +60,6 @@ func fanRank(for points: Int) -> FanRank {
 
 struct PerfilView: View {
     @Environment(AppState.self) private var appState
-    @AppStorage("fanNumber") private var fanNumber: Int = 0
     @State private var showFigurita = false
 
     private var unlockedSet: Set<String> {
@@ -77,7 +76,7 @@ struct PerfilView: View {
                 ScrollView {
                     VStack(spacing: 24) {
                         FiguritaCTABanner { showFigurita = true }
-                        FanIdentityCard(appState: appState, fanNumber: fanNumber, unlockedCount: unlockedSet.count)
+                        FanIdentityCard(appState: appState, unlockedCount: unlockedSet.count)
                         BadgesCollection(unlockedSet: unlockedSet)
                         FollowTimCard()
                         AboutCard()
@@ -145,14 +144,12 @@ private struct FiguritaCTABanner: View {
 
 private struct FanIdentityCard: View {
     let appState: AppState
-    let fanNumber: Int
     let unlockedCount: Int
 
     @State private var appeared = false
-
-    private var fanNumberText: String {
-        fanNumber == 0 ? "FAN #———————" : String(format: "FAN #%07d", fanNumber)
-    }
+    @State private var draftName = ""
+    @State private var isEditingName = false
+    @FocusState private var nameFocused: Bool
 
     private var stats: [(emoji: String, value: String, label: String)] {
         [
@@ -170,12 +167,26 @@ private struct FanIdentityCard: View {
 
         VStack(spacing: 16) {
             VStack(spacing: 6) {
-                Text(fanNumberText)
-                    .font(.system(size: 34, weight: .black))
-                    .monospacedDigit()
-                    .foregroundStyle(.white)
-                    .lineLimit(1)
-                    .minimumScaleFactor(0.7)
+                if !appState.fanName.isEmpty && !isEditingName {
+                    HStack(spacing: 8) {
+                        Text(appState.fanName)
+                            .font(.system(size: 34, weight: .black))
+                            .foregroundStyle(.white)
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.65)
+                        Button {
+                            draftName = appState.fanName
+                            isEditingName = true
+                            nameFocused = true
+                        } label: {
+                            Image(systemName: "pencil")
+                                .font(.system(size: 16, weight: .semibold))
+                                .foregroundStyle(.white.opacity(0.4))
+                        }
+                    }
+                } else {
+                    nameEntryForm
+                }
 
                 HStack(spacing: 6) {
                     if !rank.emoji.isEmpty {
@@ -202,7 +213,54 @@ private struct FanIdentityCard: View {
         .frame(maxWidth: .infinity)
         .background(Color(hex: "#12121A"))
         .clipShape(RoundedRectangle(cornerRadius: 16))
+        .onTapGesture { nameFocused = false }
         .onAppear { appeared = true }
+    }
+
+    private var nameEntryForm: some View {
+        let trimmed = draftName.trimmingCharacters(in: .whitespaces)
+        let valid = NameValidator.isValid(trimmed)
+        return VStack(spacing: 10) {
+            TextField("", text: $draftName, prompt:
+                Text("Tu nombre o apodo")
+                    .foregroundColor(.white.opacity(0.3))
+            )
+            .font(.system(size: 18))
+            .foregroundColor(.white)
+            .multilineTextAlignment(.center)
+            .padding(.horizontal, 16)
+            .padding(.vertical, 14)
+            .background(Color(hex: "#1A1A2E"))
+            .clipShape(RoundedRectangle(cornerRadius: 12))
+            .overlay(
+                RoundedRectangle(cornerRadius: 12)
+                    .stroke(Color(hex: "#F0C130"), lineWidth: 1.5)
+            )
+            .focused($nameFocused)
+            .submitLabel(.done)
+            .onSubmit {
+                if valid {
+                    appState.fanName = trimmed
+                    isEditingName = false
+                    nameFocused = false
+                }
+            }
+
+            Button {
+                appState.fanName = trimmed
+                isEditingName = false
+                nameFocused = false
+            } label: {
+                Text("Guardar")
+                    .font(.system(size: 15, weight: .bold))
+                    .foregroundColor(.black)
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 44)
+                    .background(Color(hex: "#F0C130").opacity(valid ? 1.0 : 0.4))
+                    .clipShape(RoundedRectangle(cornerRadius: 12))
+            }
+            .disabled(!valid)
+        }
     }
 
     private func shortDate(_ iso: String) -> String {
